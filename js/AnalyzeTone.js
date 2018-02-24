@@ -3,9 +3,9 @@ var express = require('express');
  //create an instance of the tone analyzer with your credentials
     var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
     var tone_analyzer = new ToneAnalyzerV3({
-      username: 'cbf64268-298d-4e82-8218-25f6139e63e4',
-      password: 'J4c34rFTk7BR',
-      version_date: '2018-02-23'
+      username: '0fdf1b6e-8c6d-4d1e-986d-c9e0cc776ace',
+      password: 'nLMw2yTVST7S',
+      version_date: '2018-02-20'
     });
 
 
@@ -35,3 +35,4 @@ module.exports = function(req, res) {
     );
 
 }
+>>>>>>> 9e46b36912472975c09b68676611bfcb6f16e4aa

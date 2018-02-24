@@ -35,4 +35,3 @@ module.exports = function(req, res) {
     );
 
 }
->>>>>>> 9e46b36912472975c09b68676611bfcb6f16e4aa

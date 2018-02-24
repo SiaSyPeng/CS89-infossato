@@ -33,13 +33,13 @@ function displayToneAnalysisResults(jsonResponse){
     // results for the whole document
     var tones = jsonResponse.document_tone.tones;
     if (tones.length > 0){
-        $('.responseBlock').append(document.createElement('h3').innerHTML = 'Results : Whole Document');
+        $('.tone_responseBlock').append(document.createElement('h3').innerHTML = 'Results : Whole Document');
 
       //  create results table
         var table = document.createElement("table");
         table.className = 'resultsTable';
         table.innerHTML = '<tr><th>Tone</th><th>Score</th></tr>';
-        $('.responseBlock').append(table);
+        $('.tone_responseBlock').append(table);
 
         for(var index = 0 ;index < tones.length; index++ ){
             addToTable(tones[index].tone_name, tones[index].score);
@@ -50,13 +50,13 @@ function displayToneAnalysisResults(jsonResponse){
    // results for the individual sentences
     var sentencesTones = jsonResponse.sentences_tone;
     if (sentencesTones.length > 0){
-        $('.responseBlock').append(document.createElement('h3').innerHTML = 'Results : Sentences');
+        $('.tone_responseBlock').append(document.createElement('h3').innerHTML = 'Results : Sentences');
 
         //  create results table for sentences
         var table = document.createElement("table");
         table.className = 'resultsTable_sentences';
         table.innerHTML = '<tr><th>Sentence</th><th>Tone</th><th>Score</th></tr>';
-        $('.responseBlock').append(table);
+        $('.tone_responseBlock').append(table);
 
         /****TO FIX*****/
         //the following for loop needs some fixing. need to correctly pass the structure of the
@@ -137,7 +137,7 @@ function addToTable_sentence(sentence, toneName,score){
                     /***** Event Listeners *******/
 
 // listen to click on submitText button // $(document)
-    $( ":button" ).on('click',
+    $( ".submitText" ).on('click',
     function(){
         console.log( ""+ $(".TextToAnalyse").val() +" Was passed to getToneAnalysis");
      handleSubmitText( $(".TextToAnalyse").val());

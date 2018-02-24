@@ -13,21 +13,31 @@ var express = require('express');
 
   module.exports = function(req, res) {
 
-    //  console.log("the request received by NLP is: " + req.body.input);
+     console.log("the request received by NLP is: " + req.body.input);
 
       //NLP parameters
       var params = {
-      'text_input':  req.body.input,
-      'keyword': '',
-      'target_phrase': '',
+      'text':  req.body.input,
+      'features': {
+          'keywords': {
+            'emotion': true,
+            'sentiment': true,
+            'limit': 2
+          },
+          'emotion': {},
+          'sentiment': {}
+        }
       };
 
       //call tone analyzer to analyze doc
-      natural_language_understanding.analyze(parameters, function(err, response) {
+      natural_language_understanding.analyze(params, function(err, response) {
         if (err)
           console.log('error:', err);
         else
-          console.log(JSON.stringify(response, null, 2));
+          // console.log(JSON.stringify(response, null, 2));
+          results = console.log(JSON.stringify(response, null, 2));
+          // console.log( "parsed = " + response);
+          res.send(response);
         });
 
   }

@@ -1,5 +1,5 @@
 {
-  "name": "mongoose-examples",
+  "name": "cs89",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -13,5 +13,13 @@
     "watson-developer-cloud": "^3.0.6"
   },
   "devDependencies": {},
-  "description": ""
+  "description": "## API used - Tone Analyzer \t- Sentiment \t- Emotion - Natural Language Understanding \t- Sentiment \t- Emotion",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SiaSyPeng/CS89-infossato.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SiaSyPeng/CS89-infossato/issues"
+  },
+  "homepage": "https://github.com/SiaSyPeng/CS89-infossato#readme"
 }

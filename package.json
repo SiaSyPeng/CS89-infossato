@@ -1,0 +1,17 @@
+{
+  "name": "mongoose-examples",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^4.12.5",
+    "watson-developer-cloud": "^3.0.6"
+  },
+  "devDependencies": {},
+  "description": "The web app uses these frameworks: node.js, express , ibm tone_analyzer"
+}

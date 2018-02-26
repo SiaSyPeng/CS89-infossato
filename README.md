@@ -57,10 +57,10 @@ enter http://localhost:8081/ on your browser
 
 - [ ] M 2/23 Set up Tone Analyzer
 	- [x] URL
-	- [ ] Text
+	- [x] Text
 - [ ] S&J 2/23 Set up natural language understanding api
-	- [ ] URL
-	- [ ] Text
+	- [x] URL
+	- [x] Text
 	- [ ] terms
 - [ ] (Train watson)
 	- [ ] Similar to previous project

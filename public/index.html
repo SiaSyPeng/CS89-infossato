@@ -2,30 +2,39 @@
 <html>
   <head>
     <title>Sentient App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <body>
-      <h1>SENTIENT WEB APP</h1>
-    <div>
+    <div class="text-center">
+      <h1 class="display-1">SENTIENT <small class="text-muted">WEB APP</small></h1>
+    </div>
+    <div class="container">
       <h2>Part 1: Tone Analyzer</h2>
       <p> Enter sample text. Hit 'Analyze' to get tone analysis</p>
       <div class=inputBlock>
-          <textarea class="TextToAnalyse" placeholder="Enter your text here:
+          <textarea class="form-control" rows="5" id="TextToAnalyse" placeholder="Enter your text here:
           it could be a sentence or a whole document."></textarea>
-          <button class="submitText">Analyze</button>
+          <br  />
+          <button type="button" class="btn btn-primary" id="submitText">Analyze</button>
       </div>
       <div class=tone_responseBlock>
       </div>
     </div>
 
-    <div>
+    <div class="container">
       <h2>Part 2: Natural Language Processor</h2>
       <p> Input text here.  Hit 'Process' to output sentiment and other natural language processing results.  </p>
       <div class=inputBlock>
-        <textarea class="TextToProcess" placeholder="Enter your text here:
+        <textarea class="form-control" rows="5" id="TextToProcess" placeholder="Enter your text here:
         it could be a sentence or a whole document."></textarea>
-        <button class="processText">Process</button>
+        <br />
+        <button type="button" class="btn btn-primary" id="processText">Process</button>
       </div>
       <div class=nl_responseBlock>
     </div>
@@ -41,6 +50,7 @@
 
     </body>
     <script src="main.js"></script>
+
     <!-- <script>
     </script> -->
 </html>

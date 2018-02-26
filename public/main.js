@@ -137,10 +137,10 @@ function addToTable_sentence(sentence, toneName,score){
                     /***** Event Listeners *******/
 
 // listen to click on submitText button // $(document)
-    $( ".submitText" ).on('click',
+    $( "#submitText" ).on('click',
     function(){
-        console.log( ""+ $(".TextToAnalyse").val() +" Was passed to getToneAnalysis");
-     handleSubmitText( $(".TextToAnalyse").val());
+        console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
+     handleSubmitText( $("#TextToAnalyse").val());
     });
 
 
@@ -268,10 +268,10 @@ function addToTable_sentence(sentence, toneName,score){
                      /***** Event Listeners *******/
 
  // listen to click on submitText button // $(document)
-     $( ".processText" ).on('click',
+     $( "#processText" ).on('click',
      function(){
-         console.log( ""+ $(".TextToProcess").val() +" Was passed to getNLAnalysis");
-      handleNLText( $(".TextToProcess").val());
+         console.log( ""+ $("#TextToProcess").val() +" Was passed to getNLAnalysis");
+      handleNLText( $("#TextToProcess").val());
      });
 
 

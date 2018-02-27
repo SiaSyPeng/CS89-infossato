@@ -29,8 +29,7 @@ enter http://localhost:8081/ on your browser
 
 ## API used
 - Tone Analyzer
-	- Sentiment
-	- Emotion
+	- Emotion 
 - Natural Language Understanding
 	- Sentiment
 	- Emotion

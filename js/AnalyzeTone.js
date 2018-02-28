@@ -14,24 +14,28 @@ var express = require('express');
 module.exports = function(req, res) {
 
   //  console.log("the request received by AnalyzeTone is: " + req.body.input);
-
+var content_type = req.body.content_type 
+console.log("content_type recieved at AnalyzeTone server :" +  content_type); 
+      
     //create the parameters to be passed to tone_analyzer
     var params = {
     'tone_input':  req.body.input,
-    'content_type': 'text/plain'
-    };
-
+    'content_type': content_type 
+    };  
+ 
     //call tone analyzer to analyze doc
     tone_analyzer.tone(params, function(error, response){
       if (error)
-        console.log('error:', error);
-      else
+        console.log('error:', error); 
+      else{
           //parse response and return results
-    //   console.log("Tone analyzer reached success");
-       results = console.log(JSON.stringify(response, null, 2));
-       console.log( "parsed = " + response.document_tone.tones[0].tone_name );
-       res.send(response);
-      }
-    );
+          // console.log("Tone analyzer reached success");
+           results = console.log(JSON.stringify(response, null, 2));
+           if (response.document_tone.tones){ 
+               console.log( "parsed = " + response.document_tone.tones[0].tone_name );
+           }
+           res.send(response);
+         }
+    });
 
 }

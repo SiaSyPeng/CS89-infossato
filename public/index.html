@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  </head> 
+  </head>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <body>
@@ -37,6 +37,24 @@
         <button type="button" class="btn btn-primary" id="processText">Process</button>
       </div>
       <div class=nl_responseBlock>
+      </div>
+      <div class="container-fluid row">
+          <div class="col-md-6">
+            <canvas id="toneChart"></canvas>
+          </div>
+          <div class="col-md-6">
+            <canvas id="emotionChart"></canvas>
+          </div>
+      </div>
+      <div class="container-fluid row">
+          <div class="col-md-6">
+            <canvas id="senEmotionChart"></canvas>
+          </div>
+          <div class="col-md-6">
+            <canvas id="keyEmotionChart"></canvas>
+          </div>
+      </div>
+
     </div>
       <!--   //TODO
        /* Add more elements to popualte the page. More elements needed for when a user wants to
@@ -49,6 +67,7 @@
         -->
 
     </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="main.js"></script>
 
     <!-- <script>

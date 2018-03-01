@@ -1,39 +1,39 @@
 
                 //SENTIENT WEB APP : Back-end js//
 
- 
+
                         /***** Helper Functions *******/
 
-   
+
 
 
 function TextHTMLOrURL(){
    return $("#content_type").val();
-} 
+}
 
 
 //to log errors
 function errorCB(jqXHR, textStatus, err) {
   console.error("Error", err);
 }
- 
 
-//ajax request to server 
+
+//ajax request to server
 function getToneAnalysis(TextToAnalyze, content_type){
-    
-  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
+
+  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
     if (typeof content_type === 'undefined' || content_type === null || content_type == 'text') {
         var content_type = 'plain';    //make plain text the default content type
         console.log('ToneAnalyzer content_type changed to'+ content_type);
-    } 
-   
+    }
+
     if (content_type != 'url'){   //dont send ToneAnalyzer request if the type is url
-      
-       let info = {input : TextToAnalyze, content_type: 'text/'+content_type}; 
+
+       let info = {input : TextToAnalyze, content_type: 'text/'+content_type};
        $.ajax({
               contentType: 'application/json',
               data: JSON.stringify(info),
-              url: '/services/AnalyzeTone', 
+              url: '/services/AnalyzeTone',
               type: 'POST',
               success: function(result) {
              // displayToneAnalysisResults(result);
@@ -44,29 +44,29 @@ function getToneAnalysis(TextToAnalyze, content_type){
     }
 
 }
-          
+
 
 function getNLAnalysis(TextToAnalyze, content_type){
-    
-  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
+
+  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
     if (typeof content_type === 'undefined' || content_type === null) {
         var content_type = 'text';    //make plain text the default content type
         console.log('NLU content_type changed to '+ content_type);
     }
-   
-        
-   let info = {input : TextToAnalyze, content_type: content_type}; 
+
+
+   let info = {input : TextToAnalyze, content_type: content_type};
    $.ajax({
           contentType: 'application/json',
           data: JSON.stringify(info),
-          url: '/services/AnalyzeNL', 
-          type: 'POST',  
+          url: '/services/AnalyzeNL',
+          type: 'POST',
           success: function(result) {
-          //displayToneAnalysisResults(result); 
+          //displayToneAnalysisResults(result);
           },
           error: errorCB
-      }); 
-   console.log(" NLAnalysis ajax sent");      
+      });
+   console.log(" NLAnalysis ajax sent");
 }
 
 
@@ -94,9 +94,9 @@ function displayToneAnalysisResults(jsonResponse){
         }
     }
 
-    
-    
-    
+
+
+
 
    // results for the individual sentences
     var sentencesTones = jsonResponse.sentences_tone;
@@ -140,7 +140,7 @@ function addToTable_sentence(sentence, toneName,score){
    var tableRow = document.createElement("tr");
    tableRow.innerHTML = toneHTML;
     $('.resultsTable_sentences').append(tableRow);
-} 
+}
 
 //Parse tone response
  function displayNLAnalysisResults(jsonResponse){
@@ -150,7 +150,7 @@ function addToTable_sentence(sentence, toneName,score){
 
      // console.log('emotion' + emotion);
      console.log('sentiment' + sentiment);
- 
+
      // if (emotion.length > 0){
      //     // $('.nl_responseBlock').append(document.createElement('h3').innerHTML = 'Results : Whole Document');
      //     $('.nl_responseBlock').append(document.createElement('h3').innerHTML=emotion);
@@ -186,15 +186,137 @@ function addToTable_sentence(sentence, toneName,score){
     function handleSubmitText(TextToAnalyse) {
        // when analyze button is hit,
        var content_type =  TextHTMLOrURL();
-       getToneAnalysis(TextToAnalyse, content_type);  
-       getNLAnalysis(TextToAnalyse, content_type); 
+       getToneAnalysis(TextToAnalyse, content_type);
+       getNLAnalysis(TextToAnalyse, content_type);
    //   displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
     //   displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
-    } 
- 
- 
+    }
 
 
+
+    var ctx = document.getElementById("toneChart").getContext('2d');
+    var toneChart = new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+            labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
+            datasets: [{
+                data: [12, 19, 3, 5, 2, 10, 11],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(100, 159, 64, 0.2)',
+                  'rgba(255, 20, 20, 0.2)'
+                ]
+            }],
+        },
+        options: {
+          animation: {
+            animateScale: true
+          }
+        }
+    });
+
+    var ctx = document.getElementById("emotionChart").getContext('2d');
+    var emotionChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
+            datasets: [{
+                label: 'Emotions',
+                data: [12, 19, 3, 5, 2],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1,
+                pointBackgroundColor: 'rgba(255, 20, 20, 0.8)'
+
+            }]
+        },
+        options: {
+            scales: {
+                display: true
+            }
+        }
+    });
+
+    var ctx = document.getElementById("keyEmotionChart").getContext('2d');
+    var keyEmotionChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
+            datasets: [{
+                label: 'Trump',
+                data: [1, 20, 5, 7, 4],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'Obama',
+                data: [12, 19, 3, 5, 2],
+                backgroundColor: [
+                    'rgba(255, 99, 20, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            }
+          ],
+
+        },
+        options: {
+            scales: {
+                display: true
+            }
+        }
+    });
+
+    var ctx = document.getElementById("senEmotionChart").getContext('2d');
+    var senEmotionChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
+            datasets: [{
+                label: 'This is bad',
+                data: [1, 20, 5, 7, 4],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'This is good',
+                data: [12, 19, 3, 5, 2],
+                backgroundColor: [
+                    'rgba(255, 99, 20, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            }
+          ]
+        },
+        options: {
+            scales: {
+                display: true
+            }
+        }
+    });
 
 
     //TODO
@@ -210,7 +332,7 @@ function addToTable_sentence(sentence, toneName,score){
 
                      /***** Event Listeners *******/
 
-// listen to click on submitText button // 
+// listen to click on submitText button //
     $( "#submitText" ).on('click',
     function(){
        // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
@@ -224,5 +346,3 @@ function addToTable_sentence(sentence, toneName,score){
 
 
                     /***** End of Event Listeners *******/
-
- 

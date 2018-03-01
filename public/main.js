@@ -1,7 +1,121 @@
 
                 //SENTIENT WEB APP : Back-end js//
 
+ //Results variables
+var ToneAnalyzerResults; 
+var NLUResults;
+var Overall = []; 
+var RESULTS; 
+/*
+
+
+  var Tones{
+    'analytical': ,
+    'confident': ,
+    'tentative':    
+  };
+
  
+
+var Overall{ Tones, Emotions, Sentiment }; 
+
+
+
+var Keywords{};        //could be any number of words, each with an emotion-score pair
+    for (index=0; index < ;index++){
+     keywords[sth[index]] = {sth[index].tone,sth[index].score}; 
+    }
+ 
+        
+var Sentences{};         //could be any number of sentences , each with an emotion-score pair
+  for (index=0; index < ;index++){
+     sentences[sth[index]] = {sth[index].tone,sth[index].score}; 
+}
+         
+var Outliers{keywords,sentences};
+     
+var Concepts{};         //could be any number of word-score pairs
+  for (index=0; index < ;index++){
+     sentences[sth[index]] = sth[index].score; 
+  } 
+    
+         
+var TotalResults{overall,concepts,outliers};
+*/   
+
+function fillModelWithToneAnalyzerResults(results){
+    ToneAnalyzerResults = results; //store resutls in a global var
+    var tones = ToneAnalyzerResults.document_tone.tones;
+    var Tones = [];
+    var ToneScores = [];
+    for(var index = 0 ;index < tones.length; index++ ){
+        Tones[index] = tones[index].tone_name;
+        ToneScores[index] = tones[index].score;        
+    }
+       
+   // console.log("Tones is: " + Tones[0]);  
+    Overall.push(Tones);
+}
+ 
+ 
+function fillModelWithNLUResults(results){
+            //emotions
+    NLUResults = results;  //store results in a global var
+    var emotions = NLUResults.emotion.document.emotion;
+    var Emotions = ['sadness', 'joy', 'fear','disgust','anger']; 
+    var EmotionScores = []; 
+    var emotions = Object.values(emotions);  //map json values to an array
+    var topEmotion = []; 
+    var topEmotionScore = 0;
+    for(var index = 0 ;index < emotions.length; index++){
+        EmotionScores[index] = emotions[index];
+        if (emotions[index] > topEmotionScore){  
+            topEmotionScore = emotions[index]; 
+            topEmotion =[ Emotions[index], emotions[index] ];   // store [emotions, score]
+        }
+            
+    }    
+    //console.log("emotion indexed is : "+ Emotions[1] +":"+ EmotionScores[1]);
+     console.log("topEmotion is :"+ topEmotion[0]); 
+    
+            //sentiment
+    var Sentiment =  NLUResults.sentiment.document;    
+     Overall.push(EmotionScores)
+     Overall.push(Sentiment);  
+    
+     //console.log("Sentiment in overall :" +Overall[2].label); 
+    
+    
+            //keywords
+    
+ }
+       
+
+/*
+function fillModelWithOutliers(){    
+    //get highest scoring emotion
+    //keywords
+    var Outlyingkeywords = {};
+    
+    for(){
+        
+        keywords  = NLUResults.keywords
+         for (emotions in keywords){
+        
+        }
+        var emotions = Object.values(keywords.emotions);  //map json values to an array
+       
+         emotion = record highest scoring emotion
+        
+        if (highest scoring emotion != topEmotion[1]){
+        
+        add to outlying keywords
+        }
+    }
+    
+}
+  */
+
                         /***** Helper Functions *******/
 
    
@@ -9,11 +123,11 @@
 
 function TextHTMLOrURL(){
    return $("#content_type").val();
-} 
+}
 
 
 //to log errors
-function errorCB(jqXHR, textStatus, err) {
+function errorCB(jqXHR, textStatus, err){
   console.error("Error", err);
 }
  
@@ -36,15 +150,17 @@ function getToneAnalysis(TextToAnalyze, content_type){
               url: '/services/AnalyzeTone', 
               type: 'POST',
               success: function(result) {
+              fillModelWithToneAnalyzerResults(result);      
              // displayToneAnalysisResults(result);
               },
-              error: errorCB
+              error: errorCB 
           });
        console.log("ajax sent");
     }
 
 }
           
+
 
 function getNLAnalysis(TextToAnalyze, content_type){
     
@@ -62,18 +178,16 @@ function getNLAnalysis(TextToAnalyze, content_type){
           url: '/services/AnalyzeNL', 
           type: 'POST',  
           success: function(result) {
-          //displayToneAnalysisResults(result); 
-          },
+          //displayToneAnalysisResults(result);
+          fillModelWithNLUResults(result);  
+          }, 
           error: errorCB
       }); 
    console.log(" NLAnalysis ajax sent");      
 }
 
 
-
-
-
-
+ 
 
 //Parse tone response
 function displayToneAnalysisResults(jsonResponse){
@@ -142,33 +256,6 @@ function addToTable_sentence(sentence, toneName,score){
     $('.resultsTable_sentences').append(tableRow);
 } 
 
-//Parse tone response
- function displayNLAnalysisResults(jsonResponse){
-
-     // results for the whole document
-     var sentiment = jsonResponse.sentiment.document.label;
-
-     // console.log('emotion' + emotion);
-     console.log('sentiment' + sentiment);
- 
-     // if (emotion.length > 0){
-     //     // $('.nl_responseBlock').append(document.createElement('h3').innerHTML = 'Results : Whole Document');
-     //     $('.nl_responseBlock').append(document.createElement('h3').innerHTML=emotion);
-     //   //  create results table
-     //     // var table = document.createElement("table");
-     //     // table.className = 'resultsTable';
-     //     // table.innerHTML = '<tr><th>emotion</th><th>Score</th></tr>';
-     //     // $('.tone_responseBlock').append(table);
-     //     //
-     //     // for(var index = 0 ;index < tones.length; index++ ){
-     //     //     addToTable(tones[index].tone_name, tones[index].score);
-     //     // }
-     //
-     // }
- }
-
-     //TODO
-   /* Add for functions to revise the display, make it more intuitive*/
 
 
 
@@ -188,8 +275,7 @@ function addToTable_sentence(sentence, toneName,score){
        var content_type =  TextHTMLOrURL();
        getToneAnalysis(TextToAnalyse, content_type);  
        getNLAnalysis(TextToAnalyse, content_type); 
-   //   displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
-    //   displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
+      // displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
     } 
  
  

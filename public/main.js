@@ -194,16 +194,44 @@ function addToTable_sentence(sentence, toneName,score){
 
 
 
+    var ctx = document.getElementById("toneChart").getContext('2d');
+    var toneChart = new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+            labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
+            datasets: [{
+                data: [12, 19, 3, 5, 2, 10, 11],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(100, 159, 64, 0.2)',
+                  'rgba(255, 20, 20, 0.2)'
+                ]
+            }],
+        },
+        options: {
+          animation: {
+            animateScale: true
+          }
+        }
+    });
+
     var ctx = document.getElementById("emotionChart").getContext('2d');
-    var myChart = new Chart(ctx, {
+    var emotionChart = new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust", "Confident", "tentative"],
+            labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
             datasets: [{
                 label: 'Emotions',
-                data: [12, 19, 3, 5, 2, 10],
+                data: [12, 19, 3, 5, 2],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
@@ -213,11 +241,7 @@ function addToTable_sentence(sentence, toneName,score){
         },
         options: {
             scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
+                display: true
             }
         }
     });

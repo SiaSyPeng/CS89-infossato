@@ -453,6 +453,18 @@ function addToTable_sentence(sentence, toneName,score){
      handleSubmitText( $("#TextToAnalyse").val());
     });
 
+    $( "#TextRadio" ).on('click',
+    function(){
+       // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
+     alert("you did the text");
+    });
+
+    $( "#URLRadio" ).on('click',
+    function(){
+       // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
+     alert("you did the URL");
+    });
+
 
 
      //TODO

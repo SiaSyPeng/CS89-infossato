@@ -23,12 +23,12 @@ module.exports = function(req, res) {
           'keywords': {
             'emotion': true,
             'sentiment': true,
-            'limit': 2
+            'limit': 4
           },
           'emotion': {},
           'sentiment': {},
-          'concepts': {}
-        } 
+          'concepts': {'limit': 4}
+        }  
       }; 
 
       //call the NLU API analyze doc

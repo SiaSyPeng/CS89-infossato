@@ -291,7 +291,29 @@ function addToTable_sentence(sentence, toneName,score){
                 label: 'This is bad',
                 data: [1, 20, 5, 7, 4],
                 backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(255, 99, 132, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'This is something',
+                data: [5, 10, 10, 6, 14],
+                backgroundColor: [
+                  'rgba(200, 99, 132, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'lalala',
+                data: [13, 2, 3, 3, 5],
+                backgroundColor: [
+                  'rgba(100, 99, 132, 0.5)',
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
@@ -302,7 +324,7 @@ function addToTable_sentence(sentence, toneName,score){
                 label: 'This is good',
                 data: [12, 19, 3, 5, 2],
                 backgroundColor: [
-                    'rgba(255, 99, 20, 0.2)',
+                    'rgba(255, 99, 20, 0.5)',
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',

@@ -42,14 +42,13 @@ enter http://localhost:8081/ on your browser
 
 
 ## Full Stack Web
-- Backend: Manny
+- Backend
 	- Ajax, express, js
 	- Passing Api
-- Frontend & Connecting: Sia & Jiachen
+- Frontend & Connecting
 	- set up Api interface
 	- Js, html, css
-- Bootstrap for graphs
-- Jenny’s workshop
+	- Bootstrap for graphs
 
 ## Timeline
 **Feb 23rd - March 4th**

@@ -5,6 +5,7 @@ var ToneAnalyzerResults;
 var NLUResults;
 var Overall = [];
 var RESULTS;
+var concepts = ['Dartmouth'];
 /*
 
 
@@ -288,11 +289,6 @@ function addToTable_sentence(sentence, toneName,score){
                     /***** End of Helper Functions *******/
 
 
-
-
-
-
-
                     /***** Event Handlers *******/
 
 
@@ -305,6 +301,30 @@ function addToTable_sentence(sentence, toneName,score){
     }
 
 
+    function queryConcept(Concepts) {
+       console.log('Quering: ' + Concepts[0]);
+       getSentimentAnalysis(Concepts[0]);
+    }
+
+    function getDiscoveryAnalysis(Concepts) {
+       console.log("The concept about to be passed to ajax is :" + Concepts );
+       let info = {input : Concepts };
+       $.ajax({
+            contentType: 'application/json',
+            data: JSON.stringify(info),
+            url: '/services/AnalyzeSentiment',
+            type: 'POST',
+            success: function(result) {
+            displayToneAnalysisResults(result);
+           },
+            error: errorCB
+        });
+        console.log("ajax sent");
+    }
+
+    function displayDiscoveryAnalysis(result) {
+      console.log(result);
+    }
     /*
      * All the graphs
      */

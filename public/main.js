@@ -292,250 +292,256 @@ function addToTable_sentence(sentence, toneName,score){
                     /***** Event Handlers *******/
 
 
-    function handleSubmitText(TextToAnalyse) {
-       // when analyze button is hit,
-       var content_type =  TextHTMLOrURL();
-       getToneAnalysis(TextToAnalyse, content_type);
-       getNLAnalysis(TextToAnalyse, content_type);
-      // displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
-    }
+  function handleSubmitText(TextToAnalyse) {
+     // when analyze button is hit,
+     var content_type =  TextHTMLOrURL();
+     getToneAnalysis(TextToAnalyse, content_type);
+     getNLAnalysis(TextToAnalyse, content_type);
+    // displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
+  }
 
 
-    function queryConcept(Concepts) {
-       console.log('Quering: ' + Concepts[0]);
-       getSentimentAnalysis(Concepts[0]);
-    }
+  $( "#testBut" ).on('click',
+  function(){
+     // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
+   queryConcept(concepts);
+  });
 
-    function getDiscoveryAnalysis(Concepts) {
-       console.log("The concept about to be passed to ajax is :" + Concepts );
-       let info = {input : Concepts };
-       $.ajax({
-            contentType: 'application/json',
-            data: JSON.stringify(info),
-            url: '/services/AnalyzeSentiment',
-            type: 'POST',
-            success: function(result) {
-            displayToneAnalysisResults(result);
-           },
-            error: errorCB
-        });
-        console.log("ajax sent");
-    }
+  function queryConcept(Concepts) {
+     console.log('Quering: ' + Concepts[0]);
+     getDiscoveryAnalysis(Concepts[0]);
+  }
 
-    function displayDiscoveryAnalysis(result) {
-      console.log(result);
-    }
-    /*
-     * All the graphs
-     */
+  function getDiscoveryAnalysis(Concepts) {
+     console.log("The concept about to be passed to ajax is : " + Concepts );
+     let info = {input : Concepts };
+     $.ajax({
+          contentType: 'application/json',
+          data: JSON.stringify(info),
+          url: '/services/AnalyzeSentiment',
+          type: 'POST',
+          success: function(result) {
+          displayToneAnalysisResults(result);
+         },
+          error: errorCB
+      });
+      console.log("ajax sent");
+  }
 
-    var ctx = document.getElementById("toneChart").getContext('2d');
-    var toneChart = new Chart(ctx, {
-        type: 'polarArea',
-        data: {
-            labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
-            datasets: [{
-                data: [12, 19, 3, 5, 2, 10, 11],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(100, 159, 64, 0.2)',
-                  'rgba(255, 20, 20, 0.2)'
-                ]
-            }],
-        },
-        options: {
-          animation: {
-            animateScale: true
+  function displayDiscoveryAnalysis(result) {
+    console.log(result);
+  }
+  /*
+   * All the graphs
+   */
+
+  var ctx = document.getElementById("toneChart").getContext('2d');
+  var toneChart = new Chart(ctx, {
+      type: 'polarArea',
+      data: {
+          labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
+          datasets: [{
+              data: [12, 19, 3, 5, 2, 10, 11],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(100, 159, 64, 0.2)',
+                'rgba(255, 20, 20, 0.2)'
+              ]
+          }],
+      },
+      options: {
+        animation: {
+          animateScale: true
+        }
+      }
+  });
+
+  var ctx = document.getElementById("emotionChart").getContext('2d');
+  var emotionChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+          labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
+          datasets: [{
+              label: 'Emotions',
+              data: [12, 19, 3, 5, 2],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+              ],
+              borderWidth: 1,
+              pointBackgroundColor: 'rgba(255, 20, 20, 0.8)'
+
+          }]
+      },
+      options: {
+          scales: {
+              display: true
           }
-        }
-    });
+      }
+  });
 
-    var ctx = document.getElementById("emotionChart").getContext('2d');
-    var emotionChart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
-            datasets: [{
-                label: 'Emotions',
-                data: [12, 19, 3, 5, 2],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1,
-                pointBackgroundColor: 'rgba(255, 20, 20, 0.8)'
+  var ctx = document.getElementById("keyEmotionChart").getContext('2d');
+  var keyEmotionChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+          labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
+          datasets: [{
+              label: 'Trump',
+              data: [1, 20, 5, 7, 4],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+              ],
+              borderWidth: 1
+          },
+          {
+              label: 'Obama',
+              data: [12, 19, 3, 5, 2],
+              backgroundColor: [
+                  'rgba(255, 99, 20, 0.2)',
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+              ],
+              borderWidth: 1
+          }
+        ],
 
-            }]
-        },
-        options: {
-            scales: {
-                display: true
-            }
-        }
-    });
+      },
+      options: {
+          scales: {
+              display: true
+          }
+      }
+  });
 
-    var ctx = document.getElementById("keyEmotionChart").getContext('2d');
-    var keyEmotionChart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
-            datasets: [{
-                label: 'Trump',
-                data: [1, 20, 5, 7, 4],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1
-            },
-            {
-                label: 'Obama',
-                data: [12, 19, 3, 5, 2],
-                backgroundColor: [
-                    'rgba(255, 99, 20, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1
-            }
-          ],
+  var ctx = document.getElementById("senEmotionChart").getContext('2d');
+  var senEmotionChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+          labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
+          datasets: [{
+              label: 'This is bad',
+              data: [1, 20, 5, 7, 4],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+              ],
+              borderWidth: 1
+          },
+          {
+              label: 'This is something',
+              data: [5, 10, 10, 6, 14],
+              backgroundColor: [
+                'rgba(200, 99, 132, 0.5)',
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+              ],
+              borderWidth: 1
+          },
+          {
+              label: 'lalala',
+              data: [13, 2, 3, 3, 5],
+              backgroundColor: [
+                'rgba(100, 99, 132, 0.5)',
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+              ],
+              borderWidth: 1
+          },
+          {
+              label: 'This is good',
+              data: [12, 19, 3, 5, 2],
+              backgroundColor: [
+                  'rgba(255, 99, 20, 0.5)',
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+              ],
+              borderWidth: 1
+          }
+        ]
+      },
+      options: {
+          scales: {
+              display: true
+          }
+      }
+  });
 
-        },
-        options: {
-            scales: {
-                display: true
-            }
-        }
-    });
+  var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
+  var conceptSentimentChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+          labels: ["Positive", "Neutral", "Negative"],
+          datasets: [{
+              data: [10, 20, 5],
+              backgroundColor: [
+                'rgb(220, 184, 203)',
+                'rgb(204,215,228)',
+                'rgb(206,234,247)'
+              ],
+              borderColor: [
+                  'rgb(255,255,255)',
+              ],
+              borderWidth: 1
+          }],
 
-    var ctx = document.getElementById("senEmotionChart").getContext('2d');
-    var senEmotionChart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
-            datasets: [{
-                label: 'This is bad',
-                data: [1, 20, 5, 7, 4],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.5)',
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1
-            },
-            {
-                label: 'This is something',
-                data: [5, 10, 10, 6, 14],
-                backgroundColor: [
-                  'rgba(200, 99, 132, 0.5)',
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1
-            },
-            {
-                label: 'lalala',
-                data: [13, 2, 3, 3, 5],
-                backgroundColor: [
-                  'rgba(100, 99, 132, 0.5)',
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1
-            },
-            {
-                label: 'This is good',
-                data: [12, 19, 3, 5, 2],
-                backgroundColor: [
-                    'rgba(255, 99, 20, 0.5)',
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1
-            }
-          ]
-        },
-        options: {
-            scales: {
-                display: true
-            }
-        }
-    });
+      },
+      options: {
+          animation: {
+              animateRotate: true
+          }
+      }
+  });
+  //TODO
+ /* Add  more event handlers  to handle events that occur when user
+clicks on buttons or tabs etc*/
 
-    var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
-    var conceptSentimentChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["Positive", "Neutral", "Negative"],
-            datasets: [{
-                data: [10, 20, 5],
-                backgroundColor: [
-                  'rgb(220, 184, 203)',
-                  'rgb(204,215,228)',
-                  'rgb(206,234,247)'
-                ],
-                borderColor: [
-                    'rgb(255,255,255)',
-                ],
-                borderWidth: 1
-            }],
-
-        },
-        options: {
-            animation: {
-                animateRotate: true
-            }
-        }
-    });
-    //TODO
-   /* Add  more event handlers  to handle events that occur when user
-  clicks on buttons or tabs etc*/
-
-                    /***** End of Event Handlers *******/
+                  /***** End of Event Handlers *******/
 
 
 
 
 
 
-                     /***** Event Listeners *******/
+                   /***** Event Listeners *******/
 
 // listen to click on submitText button //
-    $( "#submitText" ).on('click',
-    function(){
-       // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
-     handleSubmitText( $("#TextToAnalyse").val());
-    });
+  $( "#submitText" ).on('click',
+  function(){
+     // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
+   handleSubmitText( $("#TextToAnalyse").val());
+  });
 
-    $( "#TextRadio" ).on('click',
-    function(){
-       // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
-     alert("you did the text");
-    });
+  $( "#TextRadio" ).on('click',
+  function(){
+     // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
+   alert("you did the text");
+  });
 
-    $( "#URLRadio" ).on('click',
-    function(){
-       // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
-     alert("you did the URL");
-    });
-
-
-
-     //TODO
-     /* Add more buttons or tabs to the page then add more event listners to make the page interactive*/
+  $( "#URLRadio" ).on('click',
+  function(){
+     // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
+   alert("you did the URL");
+  });
 
 
-                    /***** End of Event Listeners *******/
+
+   //TODO
+   /* Add more buttons or tabs to the page then add more event listners to make the page interactive*/
+
+
+                  /***** End of Event Listeners *******/

@@ -193,7 +193,10 @@ function addToTable_sentence(sentence, toneName,score){
     }
 
 
-
+    /*
+     * All the graphs
+     */
+     
     var ctx = document.getElementById("toneChart").getContext('2d');
     var toneChart = new Chart(ctx, {
         type: 'polarArea',
@@ -340,7 +343,31 @@ function addToTable_sentence(sentence, toneName,score){
         }
     });
 
+    var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
+    var conceptSentimentChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ["Positive", "Neutral", "Negative"],
+            datasets: [{
+                data: [10, 20, 5],
+                backgroundColor: [
+                  'rgb(220, 184, 203)',
+                  'rgb(204,215,228)',
+                  'rgb(206,234,247)'
+                ],
+                borderColor: [
+                    'rgb(255,255,255)',
+                ],
+                borderWidth: 1
+            }],
 
+        },
+        options: {
+            animation: {
+                animateRotate: true
+            }
+        }
+    });
     //TODO
    /* Add  more event handlers  to handle events that occur when user
   clicks on buttons or tabs etc*/

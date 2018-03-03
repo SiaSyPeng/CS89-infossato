@@ -29,7 +29,7 @@ enter http://localhost:8081/ on your browser
 
 ## API used
 - Tone Analyzer
-	- Emotion 
+	- Emotion
 - Natural Language Understanding
 	- Sentiment
 	- Emotion
@@ -59,7 +59,7 @@ enter http://localhost:8081/ on your browser
 	- [ ] Text
 - [ ] S&J 2/23 Set up natural language understanding api
 	- [ ] URL
-	- [ ] Text
+	- [x] Text
 	- [ ] terms
 - [ ] (Train watson)
 	- [ ] Similar to previous project
@@ -72,7 +72,7 @@ enter http://localhost:8081/ on your browser
 	- [ ] Certain biased terms 2/27
 		- [ ] Use natural language understanding
 		- [ ] Frequency of the use
-- [ ] Graph in the frontend 3/1
+- [x] Graph in the frontend 3/1
 - [ ] Style 3/1
 - [ ] EC
 	- [ ] Discovery

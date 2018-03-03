@@ -7,14 +7,16 @@ var discovery = new DiscoveryV1({
   version_date: '2017-11-07'
 });
 
-discovery.query({
-  environment_id: 'system', collection_id: 'news-en',
-  query: 'nested(enriched_text.entities).filter(enriched_text.entities.type::Company).filter(enriched_text.entities.sentiment.score>=0.8).term(enriched_text.entities.text)'
-}),
-  function(error, data) {
-    console.log(JSON.stringify(data, null, 2));
-  }
-);
+module.exports = function(req, res) {
+  console.log('now in discovery.js');
+  discovery.query({
+    environment_id: 'system', collection_id: 'news-en',
+    query: 'nested(enriched_text.entities).filter(enriched_text.entities.type::Company).filter(enriched_text.entities.sentiment.score>=0.8).term(enriched_text.entities.text)'
+  }),
+    function(error, data) {
+      console.log(JSON.stringify(data, null, 2));
+  };
+}
 
 // discovery.createEnvironment({
 //   name: 'my_environment',

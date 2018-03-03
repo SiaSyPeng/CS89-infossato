@@ -11,6 +11,8 @@ var app = express();
 // import necessary modules to handle corresponding requests
 var AnalyzeTone = require('./js/AnalyzeTone');
 var AnalyzeNL = require('./js/NaturalLanguageProcesser');
+var Discovery = require('./js/Discovery');
+
  
 // decode the body of the post request
 app.post('/services/AnalyzeTone', bodyParser.json({type: 'json'}));
@@ -18,9 +20,13 @@ app.post('/services/AnalyzeTone', bodyParser.json({type: 'json'}));
 app.post('/services/AnalyzeTone', AnalyzeTone);
 
 app.post('/services/AnalyzeNL', bodyParser.json({type: 'json'}));
-//route /services/AnalyzeTone requests to the AnalyzeTone module
+//route /services/AnalyzeTone requests to the AnalyzeNL module
 app.post('/services/AnalyzeNL', AnalyzeNL);
  
+app.post('/services/Discovery', bodyParser.json({type: 'json'}));
+//route /services/AnalyzeTone requests to the AnalyzeNL module
+app.post('/services/Discovery', Discovery);
+
 //call homepage
 app.use('/', express.static('public')); 
 

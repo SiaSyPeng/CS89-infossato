@@ -5,8 +5,10 @@
 var ToneAnalyzerResults; 
 var NLUResults;
 var Overall = []; 
-var RESULTS; 
+var RESULTS = {};   
+var topEmotion = [];  
 /*
+//    var Emotions = ['sadness', 'joy', 'fear','disgust','anger']; 
 
 
   var Tones{
@@ -16,7 +18,6 @@ var RESULTS;
   };
 
  
-
 var Overall{ Tones, Emotions, Sentiment }; 
 
 
@@ -55,6 +56,7 @@ function fillModelWithToneAnalyzerResults(results){
        
    // console.log("Tones is: " + Tones[0]);  
     Overall.push(Tones);
+    RESULTS.Overall = Overall;
 }
  
  
@@ -65,7 +67,7 @@ function fillModelWithNLUResults(results){
     var Emotions = ['sadness', 'joy', 'fear','disgust','anger']; 
     var EmotionScores = []; 
     var emotions = Object.values(emotions);  //map json values to an array
-    var topEmotion = []; 
+   
     var topEmotionScore = 0;
     for(var index = 0 ;index < emotions.length; index++){
         EmotionScores[index] = emotions[index];
@@ -74,54 +76,115 @@ function fillModelWithNLUResults(results){
             topEmotion =[ Emotions[index], emotions[index] ];   // store [emotions, score]
         }
             
-    }    
+    }   
     //console.log("emotion indexed is : "+ Emotions[1] +":"+ EmotionScores[1]);
      console.log("topEmotion is :"+ topEmotion[0]); 
     
             //sentiment
-    var Sentiment =  NLUResults.sentiment.document;    
-     Overall.push(EmotionScores)
-     Overall.push(Sentiment);  
+    var Sentiment = NLUResults.sentiment.document;    
+    Overall.push(EmotionScores)
+    Overall.push(Sentiment);  
     
      //console.log("Sentiment in overall :" +Overall[2].label); 
     
     
             //keywords
     
- }
-       
-
-/*
-function fillModelWithOutliers(){    
-    //get highest scoring emotion
-    //keywords
-    var Outlyingkeywords = {};
     
-    for(){
-        
-        keywords  = NLUResults.keywords
-         for (emotions in keywords){
-        
-        }
-        var emotions = Object.values(keywords.emotions);  //map json values to an array
-       
-         emotion = record highest scoring emotion
-        
-        if (highest scoring emotion != topEmotion[1]){
-        
-        add to outlying keywords
-        }
+            //concepts    
+    Concepts = [];
+    for(var index = 0 ;index < NLUResults.concepts.length; index++){
+        Concepts.push(NLUResults.concepts[index].text);
     }
     
-}
-  */
+    
+    RESULTS.Concepts = Concepts;
+ }
+     
 
+
+// compares values from both ToneAnalyzer and NLU, so call after both requests called
+function fillModelWithOutliers(){ 
+    var Outliers = {};   
+    console.log("fillModelWithOutliers() called");  
+    //keywords 
+    var Outlyingkeywords = [];    
+    var keywords = NLUResults.keywords; 
+    
+    for(var index = 0 ;index < keywords.length; index++){
+    //for (var keyword in NLUResults.keywords){  
+        
+        var emotions = Object.values(keywords[index].emotion);   //get emotion scores into an array
+        
+        //find highest scoring emotion in keyword
+        var newtopEmotion = [];   
+        var newtopEmotionScore = 0;
+        for(var index2 = 0 ;index2 < emotions.length; index2++){ //for all scores of emotion
+            newtopEmotionScore = emotions[index2];
+            if (emotions[index2] > newtopEmotionScore){    //if score is greater than max, replace it
+                newtopEmotionScore = emotions[index2]; 
+                newtopEmotion = [ Emotions[index2], emotions[index2] ];   // store [emotion, score]
+            }
+  
+        }
+            
+         // if highest emotion is different from document topEmotion              
+        if (newtopEmotion[0] != topEmotion[0]){ 
+            outlyingkeyword = [ NLUResults.keywords[index].text, newtopEmotion[0], newtopEmotion[1] ]; //store keyword, emotion and score
+            Outlyingkeywords.push(outlyingkeyword);         //add it to outliers
+        } 
+         
+    }
+    Outliers.Outlyingkeywords = Outlyingkeywords; 
+    console.log(Outliers.Outlyingkeywords[0][0]); 
+    
+    
+ /*   
+    //sentences    
+    var Outlyingsentences = [];    
+    var sentences = ToneAnalyzerResults.sentences_tone; 
+    
+    for(var index = 0 ;index < sentences.length; index++){
+    
+        var emotions = Object.values(keywords[index].emotion);   //get emotion scores into an array
+        
+        //find highest scoring emotion in keyword
+        var newtopEmotion = [];  
+        var newtopEmotionScore = 0;
+        for(var index2 = 0 ;index2 < emotions.length; index2++){ //for all scores of emotion
+            newtopEmotionScore = emotions[index2];
+            if (emotions[index2] > newtopEmotionScore){    //if score is greater than max, replace it
+                newtopEmotionScore = emotions[index2]; 
+                newtopEmotion = [ Emotions[index2], emotions[index2] ];   // store [emotion, score]
+            }
+  
+        }
+            
+         // if highest emotion is different from document topEmotion              
+        if (newtopEmotion[1] != topEmotion[1]){
+            outlyingkeyword = [ NLUResults.keywords[index].text, newtopEmotion[0], newtopEmotion[1] ]; //store keyword, emotion and score
+            Outlyingkeywords.push(outlyingkeyword);         //add it to outliers
+        }
+         
+    } 
+    Outliers.Outlyingkeywords = Outlyingkeywords;
+   // console.log(Outliers.Outlyingkeywords[0][0]);
+    */
+    
+   // add to general results
+    RESULTS.Outliers = Outliers; 
+     
+}
+      
+  
+  
                         /***** Helper Functions *******/
 
    
 
 
 function TextHTMLOrURL(){
+    
    return $("#content_type").val();
 }
 
@@ -131,7 +194,23 @@ function errorCB(jqXHR, textStatus, err){
   console.error("Error", err);
 }
  
+ 
+function sendDiscoveryRequest(){
+    let info = {}; 
+       $.ajax({ 
+              contentType: 'application/json',
+              data: JSON.stringify(info),
+              url: '/services/Discovery',
+              type: 'POST',
+              success: function(result) {
+              console.log("Discovery client received success");
+              },
+              error: errorCB  
+          });
+       console.log("Discovery client request sent");
+}
 
+ 
 //ajax request to server 
 function getToneAnalysis(TextToAnalyze, content_type){
     
@@ -150,10 +229,10 @@ function getToneAnalysis(TextToAnalyze, content_type){
               url: '/services/AnalyzeTone', 
               type: 'POST',
               success: function(result) {
-              fillModelWithToneAnalyzerResults(result);      
-             // displayToneAnalysisResults(result);
+              fillModelWithToneAnalyzerResults(result);
+              fillModelWithOutliers();  //call fillModelWithOutliers() after all results are returned to since it accesses values from both results
               },
-              error: errorCB 
+              error: errorCB  
           });
        console.log("ajax sent");
     }
@@ -164,7 +243,7 @@ function getToneAnalysis(TextToAnalyze, content_type){
 
 function getNLAnalysis(TextToAnalyze, content_type){
     
-  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
+   // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
     if (typeof content_type === 'undefined' || content_type === null) {
         var content_type = 'text';    //make plain text the default content type
         console.log('NLU content_type changed to '+ content_type);
@@ -177,10 +256,10 @@ function getNLAnalysis(TextToAnalyze, content_type){
           data: JSON.stringify(info),
           url: '/services/AnalyzeNL', 
           type: 'POST',  
-          success: function(result) {
-          //displayToneAnalysisResults(result);
+          success: function(result) {              
+          getToneAnalysis(TextToAnalyze, content_type);   //call AnalyzeTone after NLU returns success
           fillModelWithNLUResults(result);  
-          }, 
+          },  
           error: errorCB
       }); 
    console.log(" NLAnalysis ajax sent");      
@@ -273,10 +352,8 @@ function addToTable_sentence(sentence, toneName,score){
     function handleSubmitText(TextToAnalyse) {
        // when analyze button is hit,
        var content_type =  TextHTMLOrURL();
-       getToneAnalysis(TextToAnalyse, content_type);  
-       getNLAnalysis(TextToAnalyse, content_type); 
-      // displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
-    } 
+       getNLAnalysis(TextToAnalyse, content_type);
+    }
  
  
 
@@ -291,7 +368,7 @@ function addToTable_sentence(sentence, toneName,score){
 
 
 
-
+ 
 
 
                      /***** Event Listeners *******/
@@ -303,7 +380,11 @@ function addToTable_sentence(sentence, toneName,score){
      handleSubmitText( $("#TextToAnalyse").val());
     });
 
-
+$( "#Discover" ).on('click',
+    function(){
+       // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
+    sendDiscoveryRequest();
+    }); 
 
      //TODO
      /* Add more buttons or tabs to the page then add more event listners to make the page interactive*/

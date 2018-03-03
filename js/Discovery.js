@@ -7,15 +7,27 @@ var discovery = new DiscoveryV1({
   version_date: '2017-11-07'
 });
 
+const params = { query: '"Dartmouth College"',
+  filter: 'language:(english|en),crawl_date>2018-02-24T12:00:00-0500,crawl_date<2018-03-03T12:00:00-0500',
+  aggregations: [
+    "term(host).term(enriched_text.sentiment.document.label)",
+    "term(enriched_text.sentiment.document.label)"
+  ],
+  count: 1,
+  environment_id: 'system',
+  collection_id: 'news' }
+
 module.exports = function(req, res) {
   console.log('now in discovery.js');
-  discovery.query({
-    environment_id: 'system', collection_id: 'news-en',
-    query: 'nested(enriched_text.entities).filter(enriched_text.entities.type::Company).filter(enriched_text.entities.sentiment.score>=0.8).term(enriched_text.entities.text)'
-  }),
-    function(error, data) {
-      console.log(JSON.stringify(data, null, 2));
-  };
+  discovery.query(params, (error, response) => {
+    console.log(params);
+    if (error) {
+      next(error);
+    } else {
+      console.log(JSON.stringify(response, null, 2));
+    }
+  });
+  console.log('exited');
 }
 
 // discovery.createEnvironment({

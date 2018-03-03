@@ -29,7 +29,7 @@ enter http://localhost:8081/ on your browser
 
 ## API used
 - Tone Analyzer
-	- Emotion 
+	- Emotion
 - Natural Language Understanding
 	- Sentiment
 	- Emotion
@@ -42,14 +42,13 @@ enter http://localhost:8081/ on your browser
 
 
 ## Full Stack Web
-- Backend: Manny
+- Backend
 	- Ajax, express, js
 	- Passing Api
-- Frontend & Connecting: Sia & Jiachen
+- Frontend & Connecting
 	- set up Api interface
 	- Js, html, css
-- Bootstrap for graphs
-- Jenny’s workshop
+	- Bootstrap for graphs
 
 ## Timeline
 **Feb 23rd - March 4th**
@@ -72,7 +71,7 @@ enter http://localhost:8081/ on your browser
 	- [ ] Certain biased terms 2/27
 		- [ ] Use natural language understanding
 		- [ ] Frequency of the use
-- [ ] Graph in the frontend 3/1
+- [x] Graph in the frontend 3/1
 - [ ] Style 3/1
 - [ ] EC
 	- [ ] Discovery

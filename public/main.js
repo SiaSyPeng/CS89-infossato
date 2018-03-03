@@ -5,6 +5,7 @@ var ToneAnalyzerResults;
 var NLUResults;
 var Overall = [];
 var RESULTS;
+var concepts = ['Dartmouth'];
 /*
 
 
@@ -288,11 +289,6 @@ function addToTable_sentence(sentence, toneName,score){
                     /***** End of Helper Functions *******/
 
 
-
-
-
-
-
                     /***** Event Handlers *******/
 
 
@@ -305,8 +301,33 @@ function addToTable_sentence(sentence, toneName,score){
     }
 
 
+    function queryConcept(Concepts) {
+       console.log('Quering: ' + Concepts[0]);
+       getSentimentAnalysis(Concepts[0]);
+    }
 
+    function getDiscoveryAnalysis(Concepts) {
+       console.log("The concept about to be passed to ajax is :" + Concepts );
+       let info = {input : Concepts };
+       $.ajax({
+            contentType: 'application/json',
+            data: JSON.stringify(info),
+            url: '/services/AnalyzeSentiment',
+            type: 'POST',
+            success: function(result) {
+            displayToneAnalysisResults(result);
+           },
+            error: errorCB
+        });
+        console.log("ajax sent");
+    }
 
+    function displayDiscoveryAnalysis(result) {
+      console.log(result);
+    }
+    /*
+     * All the graphs
+     */
 
     var ctx = document.getElementById("toneChart").getContext('2d');
     var toneChart = new Chart(ctx, {
@@ -405,7 +426,29 @@ function addToTable_sentence(sentence, toneName,score){
                 label: 'This is bad',
                 data: [1, 20, 5, 7, 4],
                 backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(255, 99, 132, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'This is something',
+                data: [5, 10, 10, 6, 14],
+                backgroundColor: [
+                  'rgba(200, 99, 132, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'lalala',
+                data: [13, 2, 3, 3, 5],
+                backgroundColor: [
+                  'rgba(100, 99, 132, 0.5)',
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
@@ -416,7 +459,7 @@ function addToTable_sentence(sentence, toneName,score){
                 label: 'This is good',
                 data: [12, 19, 3, 5, 2],
                 backgroundColor: [
-                    'rgba(255, 99, 20, 0.2)',
+                    'rgba(255, 99, 20, 0.5)',
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
@@ -432,7 +475,31 @@ function addToTable_sentence(sentence, toneName,score){
         }
     });
 
+    var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
+    var conceptSentimentChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ["Positive", "Neutral", "Negative"],
+            datasets: [{
+                data: [10, 20, 5],
+                backgroundColor: [
+                  'rgb(220, 184, 203)',
+                  'rgb(204,215,228)',
+                  'rgb(206,234,247)'
+                ],
+                borderColor: [
+                    'rgb(255,255,255)',
+                ],
+                borderWidth: 1
+            }],
 
+        },
+        options: {
+            animation: {
+                animateRotate: true
+            }
+        }
+    });
     //TODO
    /* Add  more event handlers  to handle events that occur when user
   clicks on buttons or tabs etc*/

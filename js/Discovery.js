@@ -9,13 +9,37 @@ var discovery = new DiscoveryV1({
 
 module.exports = function(req, res) {
   console.log('now in discovery.js');
-  discovery.query({
-    environment_id: 'system', collection_id: 'news-en',
-    query: 'nested(enriched_text.entities).filter(enriched_text.entities.type::Company).filter(enriched_text.entities.sentiment.score>=0.8).term(enriched_text.entities.text)'
-  }),
-    function(error, data) {
-      console.log(JSON.stringify(data, null, 2));
+
+  var concept = req.body.input;
+  console.log('req.body.input= '+ concept);
+
+  var query_string = {
+    "query":"nested(enriched_text.concepts).filter(enriched_text.concepts.score>0.75).term(enriched_text.concepts.text)",
+    "deduplicate": true,
+    "count": 1,
+    "return": "title,url,host"
   };
+
+  discovery.query( {environment_id: 'system', collection_id: 'news-en', query_options:[query_string], version: '2017-11-07'}, function(error, data) {
+      if (error)
+         console.log('error:', error);
+      else{
+         console.log(JSON.stringify(data, null, 2));
+      }
+  });
+  // discovery.query({
+  //   environment_id: 'system', collection_id: 'news-en',
+  //   query: 'nested(enriched_text.entities).filter(enriched_text.entities.type::Company).filter(enriched_text.entities.sentiment.score>=0.8).term(enriched_text.entities.text)'
+  // }),
+  //   function(error, data) {
+  //     if (error)
+  //       console.log('error:', error);
+  //     else{
+  //       console.log(JSON.stringify(data, null, 2));
+  //       res.send(response);
+  //     }
+  // };
+  //console.log(response);
 }
 
 // discovery.createEnvironment({

@@ -3,15 +3,14 @@
  //Results variables
 var ToneAnalyzerResults;
 var NLUResults;
-var Overall = [];  
-var RESULTS = {};   
-var topEmotion = [];  
-var DiscoveryResults = [];  
+var Overall = [];
+var RESULTS = {};
+var topEmotion = [];
+var DiscoveryResults = [];
 RESULTS.DiscoveryResults = DiscoveryResults;
 var DiscoveryOverallSentimentScore = [];
   
-  
-     
+
 
 
 
@@ -19,40 +18,40 @@ var DiscoveryOverallSentimentScore = [];
 
 
 function fillModelWithDiscoveryResults(DiscoveryResponse){
-    //console.log("Entered fillModelWithDiscoveryResults"); 
-    
+    //console.log("Entered fillModelWithDiscoveryResults");
+
     var OverallSentimentScore = [];
-    var sentiments = DiscoveryResponse.aggregations[0].results;   
-    if (sentiments){  
-     //    console.log("sentiments is defined"); 
+    var sentiments = DiscoveryResponse.aggregations[0].results;
+    if (sentiments){
+     //    console.log("sentiments is defined");
         for(var index = 0 ;index < sentiments.length; index++ ){
             var sentimentScore =  Object.values(sentiments[index]);
             OverallSentimentScore[index] =sentimentScore[1];
-        } 
-    } 
-    
+        }
+    }
+
     DiscoveryOverallSentimentScore = OverallSentimentScore;
     RESULTS.DiscoveryResults.OverallSentimentScore = OverallSentimentScore;
     //show graph
-    displayDiscoveryAnalysis(DiscoveryOverallSentimentScore); 
-     
- 
+    displayDiscoveryAnalysis(DiscoveryOverallSentimentScore);
+
+
     //related articles
    var articles = DiscoveryResponse.results;
     var relatedArticles = [];
-   if (articles){ 
+   if (articles){
         for(var index = 0 ;index < articles.length; index++ ){
             var anArticle = Object.values(articles[index]);
             var ArticleTitleAndUrl = [anArticle[3],anArticle[4]];
             relatedArticles.push(ArticleTitleAndUrl);
-        }  
+        }
     }
 
-    RESULTS.DiscoveryResults.relatedArticles = relatedArticles; 
-    listRelatedArticles(relatedArticles);   
+    RESULTS.DiscoveryResults.relatedArticles = relatedArticles;
+    listRelatedArticles(relatedArticles);
 }
-     
-   
+
+
 function fillModelWithToneAnalyzerResults(results){
     ToneAnalyzerResults = results; //store resutls in a global var
     var tones = ToneAnalyzerResults.document_tone.tones;
@@ -68,13 +67,13 @@ function fillModelWithToneAnalyzerResults(results){
     RESULTS.Overall = Overall;
 
     console.log("Tonescores are "+ ToneScores);
-    console.log("Tones are "+Tones); 
-    FinalToneScores = ToneScores; 
-    displayToneAnalysisResults(); 
- 
+    console.log("Tones are "+Tones);
+    FinalToneScores = ToneScores;
+    displayToneAnalysisResults(Tones, ToneScores);
+
 }
- 
- 
+
+
 
 function fillModelWithNLUResults(results){
             //emotions
@@ -96,10 +95,10 @@ function fillModelWithNLUResults(results){
     //console.log("emotion indexed is : "+ Emotions[1] +":"+ EmotionScores[1]);
     console.log("topEmotion is :"+ topEmotion[0]);
 
-    
+
             //sentiment
-    var Sentiment = NLUResults.sentiment.document;  //sentiment has properties, score and label 
-    console.log("sentiment =: "+ Sentiment); 
+    var Sentiment = NLUResults.sentiment.document;  //sentiment has properties, score and label
+    console.log("sentiment =: "+ Sentiment);
     Overall.push(EmotionScores);
     Overall.push(Sentiment);
 
@@ -107,6 +106,7 @@ function fillModelWithNLUResults(results){
      //console.log("Sentiment in overall :" +Overall[2].label);
 
   
+
             //keywords
 
 
@@ -115,23 +115,25 @@ function fillModelWithNLUResults(results){
     for(var index = 0 ;index < NLUResults.concepts.length; index++){
         Concepts.push(NLUResults.concepts[index].text);
     }
- 
+
 
     RESULTS.Concepts = Concepts;
-    console.log("Concepts extracted are" + Concepts );  
-    queryConcept(Concepts); 
+    console.log("Concepts extracted are" + Concepts );
+    $('#conceptBlock').append(document.createElement('h1').innerHTML = RESULTS.Concepts[0]);
+
+    queryConcept(Concepts);
 
  }
 
- 
+
 
 // compares values from both ToneAnalyzer and NLU, so call after both requests called
 function fillModelWithOutliers(){
-    var Outliers = {};   
-    console.log("fillModelWithOutliers() called");  
+    var Outliers = {};
+    console.log("fillModelWithOutliers() called");
     //keywords
     var Outlyingkeywords = [];
-    var keywords = NLUResults.keywords; 
+    var keywords = NLUResults.keywords;
 
     for(var index = 0 ;index < keywords.length; index++){
     //for (var keyword in NLUResults.keywords){
@@ -228,62 +230,65 @@ function errorCB(jqXHR, textStatus, err){
 function getToneAnalysis(TextToAnalyze, content_type){ 
     
   // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
+
     if (typeof content_type === 'undefined' || content_type === null || content_type == 'text') {
         var content_type = 'plain';    //make plain text the default content type
         console.log('ToneAnalyzer content_type changed to'+ content_type);
-    } 
-   
+    }
+
     if (content_type != 'url'){   //dont send ToneAnalyzer request if the type is url
-      
-       let info = {input : TextToAnalyze, content_type: 'text/'+content_type}; 
+
+       let info = {input : TextToAnalyze, content_type: 'text/'+content_type};
        $.ajax({
               contentType: 'application/json',
               data: JSON.stringify(info),
-              url: '/services/AnalyzeTone', 
+              url: '/services/AnalyzeTone',
               type: 'POST',
               success: function(result) {
               fillModelWithToneAnalyzerResults(result);
               fillModelWithOutliers();  //call fillModelWithOutliers() after all results are returned to since it accesses values from both results
               },
-              error: errorCB  
+              error: errorCB
           });
        console.log("ajax sent");
     }
 
-}  
+}
 
 
 
 function getNLAnalysis(TextToAnalyze, content_type){ 
     
    // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
+
+
     if (typeof content_type === 'undefined' || content_type === null) {
         var content_type = 'text';    //make plain text the default content type
         console.log('NLU content_type changed to '+ content_type);
     }
-   
-        
-   let info = {input : TextToAnalyze, content_type: content_type}; 
+
+
+   let info = {input : TextToAnalyze, content_type: content_type};
    $.ajax({
           contentType: 'application/json',
           data: JSON.stringify(info),
-          url: '/services/AnalyzeNL', 
-          type: 'POST',  
-          success: function(result) {              
+          url: '/services/AnalyzeNL',
+          type: 'POST',
+          success: function(result) {
           getToneAnalysis(TextToAnalyze, content_type);   //call AnalyzeTone after NLU returns success
-          fillModelWithNLUResults(result);  
-          },  
+          fillModelWithNLUResults(result);
+          },
           error: errorCB
-      }); 
-   console.log(" NLAnalysis ajax sent");      
+      });
+   console.log(" NLAnalysis ajax sent");
 }
- 
+
 
 
 function queryConcept(Concepts) {
      console.log('Quering: ' + Concepts[0]);
      getDiscoveryAnalysis(Concepts[0]);
-  } 
+  }
 
   function getDiscoveryAnalysis(Concepts){
      console.log("The concept about to be passed to ajax is : " + Concepts );
@@ -294,8 +299,8 @@ function queryConcept(Concepts) {
           url: '/services/AnalyzeSentiment',
           type: 'POST',
           success: function(result) {
-          DiscoveryResponse = result; 
-          fillModelWithDiscoveryResults(result);   
+          DiscoveryResponse = result;
+          fillModelWithDiscoveryResults(result);
 
          },
           error: errorCB
@@ -315,7 +320,7 @@ function queryConcept(Concepts) {
 
                 /***********Display Functions **********/
 
-function displayToneAnalysisResults(jsonResponse){
+function displayToneAnalysisResults(Tones, ToneScores){
 
   var ctx = document.getElementById("toneChart").getContext('2d');
     
@@ -323,9 +328,9 @@ function displayToneAnalysisResults(jsonResponse){
   var toneChart = new Chart(ctx, {
       type: 'polarArea',
       data: {
-          labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
+          labels: Tones,
           datasets: [{
-              data: FinalToneScores,
+              data: ToneScores,
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -345,8 +350,8 @@ function displayToneAnalysisResults(jsonResponse){
   });
 }
 
- 
- 
+
+
  function displayEmotionsInDocument(EmotionScoresArray){
 
      // results for the whole document
@@ -363,6 +368,7 @@ function displayToneAnalysisResults(jsonResponse){
              datasets: [{
                  label: 'Emotions',
                  data: EmotionScoresArray, 
+
                  backgroundColor: [
                    'rgba(255, 99, 132, 0.2)',
                  ],
@@ -383,9 +389,9 @@ function displayToneAnalysisResults(jsonResponse){
 
 }
 
-  
- 
-  function displayDiscoveryAnalysis(DiscoveryOverallSentimentScore) {  
+
+
+  function displayDiscoveryAnalysis(DiscoveryOverallSentimentScore) {
     // get scores for overall Sentiment, assign it to global variable OverallSentimentScore
     // in array format, corresponding to the order of positive, negative, Neutral
     console.log('in analysis');
@@ -393,7 +399,7 @@ function displayToneAnalysisResults(jsonResponse){
     var conceptSentimentChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ["Positive", "Negative", "Neutral"], 
+            labels: ["Positive", "Negative", "Neutral"],
             datasets: [{
                 data: DiscoveryOverallSentimentScore,
                 backgroundColor: [
@@ -414,28 +420,28 @@ function displayToneAnalysisResults(jsonResponse){
             }
         }
     });
-  } 
+  }
 
 
 
 function listRelatedArticles(relatedArticlesArray){
     //delete existing list
-    $('.relatedArticles').find('a').remove(); 
-          
-    for(var index = 0 ;index < relatedArticlesArray.length; index++ ){       
+    $('.relatedArticles').find('a').remove();
+
+    for(var index = 0 ;index < relatedArticlesArray.length; index++ ){
         var article = document.createElement("a");
         article.href = relatedArticlesArray[index][1];
         article.innerHTML = relatedArticlesArray[index][0]; //set title as url
-        //one article per line 
-        $('.relatedArticles').append(article);  
+        //one article per line
+        $('.relatedArticles').append(article);
      }
-} 
-  
+}
+
 
   /*
    * All the graphs
    */
-/* 
+/*
   var ctx = document.getElementById("keyEmotionChart").getContext('2d');
   var keyEmotionChart = new Chart(ctx, {
       type: 'radar',
@@ -530,7 +536,7 @@ function listRelatedArticles(relatedArticlesArray){
           }
       }
   });
- 
+
 */
 
 
@@ -538,7 +544,7 @@ function listRelatedArticles(relatedArticlesArray){
 
 
 
-  
+
 
 
 
@@ -548,7 +554,7 @@ function listRelatedArticles(relatedArticlesArray){
      // when analyze button is hit,
      var content_type = TextOrURL(); 
      getNLAnalysis(TextToAnalyse, content_type);
-} 
+}
 
                   /***** End of Event Handlers *******/
 
@@ -576,3 +582,4 @@ function listRelatedArticles(relatedArticlesArray){
   }); 
   
               /***** End of Event Listeners *******/
+

@@ -9,9 +9,7 @@ var topEmotion = [];
 var DiscoveryResults = [];
 RESULTS.DiscoveryResults = DiscoveryResults;
 var DiscoveryOverallSentimentScore = [];
-//var OverallSentimentScore1 =  [858, 758, 71];
-
-
+  
 
 
 
@@ -104,10 +102,10 @@ function fillModelWithNLUResults(results){
     Overall.push(EmotionScores);
     Overall.push(Sentiment);
 
-    FinalEmotionScores = EmotionScores;
-    displayEmotionsInDocument(EmotionScores);
+    displayEmotionsInDocument(EmotionScores);  
      //console.log("Sentiment in overall :" +Overall[2].label);
 
+  
 
             //keywords
 
@@ -200,7 +198,7 @@ function fillModelWithOutliers(){
    // add to general results
     RESULTS.Outliers = Outliers;
 
-}
+} 
 
 
 
@@ -217,20 +215,22 @@ function fillModelWithOutliers(){
 
                         /***** Helper Functions *******/
 
-function TextHTMLOrURL(){
-   return $("#content_type").val();
-}
 
+//return input type
+ function TextOrURL(){ 
+   return ($(".radioButtons").attr('id'));    
+} 
 
 //to log errors
-function errorCB(jqXHR, textStatus, err){
+function errorCB(jqXHR, textStatus, err){ 
   console.error("Error", err);
 }
 
 
-function getToneAnalysis(TextToAnalyze, content_type){
+function getToneAnalysis(TextToAnalyze, content_type){ 
+    
+  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
 
-  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
     if (typeof content_type === 'undefined' || content_type === null || content_type == 'text') {
         var content_type = 'plain';    //make plain text the default content type
         console.log('ToneAnalyzer content_type changed to'+ content_type);
@@ -257,9 +257,11 @@ function getToneAnalysis(TextToAnalyze, content_type){
 
 
 
-function getNLAnalysis(TextToAnalyze, content_type){
+function getNLAnalysis(TextToAnalyze, content_type){ 
+    
+   // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
 
-   // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
+
     if (typeof content_type === 'undefined' || content_type === null) {
         var content_type = 'text';    //make plain text the default content type
         console.log('NLU content_type changed to '+ content_type);
@@ -321,6 +323,8 @@ function queryConcept(Concepts) {
 function displayToneAnalysisResults(Tones, ToneScores){
 
   var ctx = document.getElementById("toneChart").getContext('2d');
+    
+  
   var toneChart = new Chart(ctx, {
       type: 'polarArea',
       data: {
@@ -363,7 +367,8 @@ function displayToneAnalysisResults(Tones, ToneScores){
              labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
              datasets: [{
                  label: 'Emotions',
-                 data: EmotionScoresArray,
+                 data: EmotionScoresArray, 
+
                  backgroundColor: [
                    'rgba(255, 99, 132, 0.2)',
                  ],
@@ -547,13 +552,13 @@ function listRelatedArticles(relatedArticlesArray){
 
  function handleSubmitText(TextToAnalyse) {
      // when analyze button is hit,
-     var content_type =  TextHTMLOrURL();
+     var content_type = TextOrURL(); 
      getNLAnalysis(TextToAnalyse, content_type);
 }
 
                   /***** End of Event Handlers *******/
 
-
+ 
 
 
 
@@ -563,21 +568,18 @@ function listRelatedArticles(relatedArticlesArray){
 // listen to click on submitText button //
   $( "#submitText" ).on('click',
   function(){
-     // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
    handleSubmitText( $("#TextToAnalyse").val());
-  });
-
+  }); 
+    
   $( "#TextRadio" ).on('click',
   function(){
-     // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
-   alert("you did the text");
+        $(".radioButtons").attr('id', 'text');
   });
-
+ //$('element').attr('id', 'value');
   $( "#URLRadio" ).on('click',
   function(){
-     // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
-   alert("you did the URL");
-  });
+        $(".radioButtons").attr('id', 'url');
+  }); 
+  
+              /***** End of Event Listeners *******/
 
-
-                  /***** End of Event Listeners *******/

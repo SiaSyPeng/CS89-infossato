@@ -17,7 +17,7 @@ body {
   background-image: url(pictures/cover.jpg);
   background-position: bottom left;
   padding-top: 250px;
-  padding-bottom: 200px;
+  padding-bottom: 225px;
 }
 
 .form-check {
@@ -54,6 +54,7 @@ body {
 .conceptSentiment {
   background-color: #C5CDDF;
   padding: 10px;
+  text-align: center;
 }
 
 .relaventRead {

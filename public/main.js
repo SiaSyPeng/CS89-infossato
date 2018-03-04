@@ -47,7 +47,7 @@ var Concepts{};         //could be any number of word-score pairs
 var TotalResults{overall,concepts,outliers};
 */   
 
-function fillModelWithDiscoveryResults(){
+function fillModelWithDiscoveryResults(){ 
     
      
     var OverallSentimentScore = [];

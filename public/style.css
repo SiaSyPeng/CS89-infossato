@@ -34,7 +34,16 @@ body {
 #testBut {
   text-align: center;
   background-color: #61A3CF;
-  padding: 20px;
+  padding: 40px;
+}
+
+#testButton {
+  font-size: 40px;
+  padding: 10px;
+  font-weight: bold;
+  color: white;
+  border: : 0;
+  background: none;
 }
 
 
@@ -56,7 +65,7 @@ body {
 
 .keyConcepts {
   background-color: #A9C0DF;
-  padding: 10px;
+  padding: 40px;
 }
 
 #conceptBlock{
@@ -66,13 +75,12 @@ body {
 
 .conceptSentiment {
   background-color: #C5CDDF;
-  padding: 10px;
+  padding: 30px;
 }
 
 .relatedArticles {
   background-color: #61A3CF;
-  padding: 10px;
-  padding-bottom: 20px;
+  padding: 40px;
 }
 
 .relatedArticles a {

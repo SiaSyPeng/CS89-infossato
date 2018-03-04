@@ -33,12 +33,11 @@ enter http://localhost:8081/ on your browser
 - Natural Language Understanding
 	- Sentiment
 	- Emotion
+	- Key Concepts in the user input
 
 - Discovery:
-	- retrieve the most popular news
-	- Which month/week is most angry
-	- For government or history use
-	- Does this presidential statement makes people more angry
+	- Public sentiment regarding the particular concept extracted from the user input
+	- retrieve top5 related news
 
 
 ## Full Stack Web
@@ -53,30 +52,18 @@ enter http://localhost:8081/ on your browser
 ## Timeline
 **Feb 23rd - March 4th**
 
-- [ ] M 2/23 Set up Tone Analyzer
+- [x] M 2/23 Set up Tone Analyzer
 	- [x] URL
 	- [x] Text
-- [ ] S&J 2/23 Set up natural language understanding api
+- [x] S&J 2/23 Set up natural language understanding api
 	- [x] URL
 	- [x] Text
-	- [ ] terms
-- [ ] (Train watson)
-	- [ ] Similar to previous project
-	- [ ] Train with biased
-- [ ] Level of Bias
-	- [ ] Sentiments 2/26
-		- [ ] Get all sentiment entities from watson
-		- [ ] Check if sentiment is consistent
-		- [ ] Reference: https://www.julienphalip.com/blog/identifying-bias-in-the-media-with-sentiment/
-	- [ ] Certain biased terms 2/27
-		- [ ] Use natural language understanding
-		- [ ] Frequency of the use
+	- [x] terms
 - [x] Graph in the frontend 3/1
-- [ ] Style 3/1
-- [ ] EC
-	- [ ] Discovery
-		- [ ] Trend
-		- [ ] Public sentiment in the past months
-		- [ ] User request
+- [x] Style 3/1
+- [x] EC
+	- [x] Discovery
+		- [x] Public sentiment regarding similar topic
+		- [x] Related Articles
 - [ ] Debugging
 - [ ] Video & Report 3/4

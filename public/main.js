@@ -9,7 +9,6 @@ var topEmotion = [];
 var OverallSentimentScore =  [858, 758, 71];
 
 var FinalToneScores = [0.12, 0.9, 0.3, 0.5, 0.2, 0.10, 0.11];
-var FinalEmotionScores = [];
 
 /*
 var concepts = ['Dartmouth'];
@@ -96,7 +95,7 @@ function fillModelWithNLUResults(results){
     Overall.push(EmotionScores)
     Overall.push(Sentiment);
 
-    FinalEmotionScores = EmotionScores;
+    console.log("EmotionScores " + EmotionScores);
     displayNLAnalysisResults();
 
 
@@ -324,7 +323,7 @@ function addToTable_sentence(sentence, toneName,score){
              labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
              datasets: [{
                  label: 'Emotions',
-                 data: FinalEmotionScores,
+                 data: Overall.EmotionScores,
                  backgroundColor: [
                    'rgba(255, 99, 132, 0.2)',
                  ],

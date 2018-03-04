@@ -574,6 +574,5 @@ function listRelatedArticles(relatedArticlesArray){
   function(){
         $(".radioButtons").attr('id', 'url');
   }); 
- 
-
+  
               /***** End of Event Listeners *******/

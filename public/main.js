@@ -6,9 +6,11 @@ var NLUResults;
 var Overall = []; 
 var RESULTS = {};   
 var topEmotion = [];  
+var OverallSentimentScore =  [858, 758, 71];  
+var concepts = ['Dartmouth'];  
 /*
-var concepts = ['Dartmouth'];
-var OverallSentimentScore =  [858, 758, 71]; 
+
+ 
 //    var Emotions = ['sadness', 'joy', 'fear','disgust','anger']; 
 
 
@@ -45,6 +47,21 @@ var Concepts{};         //could be any number of word-score pairs
 var TotalResults{overall,concepts,outliers};
 */   
 
+function fillModelWithDiscoveryResults(){
+    
+     
+    var OverallSentimentScore = [];
+    var sentiments = .results;
+    for(var index = 0 ;index < sentiments.length; index++ ){
+        var sentimentScore =  Object.values(sentiments[index]);
+        
+        OverallSentimentScore[index] =sentimentScore[1];
+               
+    }
+        
+} 
+ 
+ 
 function fillModelWithToneAnalyzerResults(results){
     ToneAnalyzerResults = results; //store resutls in a global var
     var tones = ToneAnalyzerResults.document_tone.tones;
@@ -105,7 +122,7 @@ function fillModelWithNLUResults(results){
 
 
 // compares values from both ToneAnalyzer and NLU, so call after both requests called
-function fillModelWithOutliers(){ 
+function fillModelWithOutliers(){
     var Outliers = {};   
     console.log("fillModelWithOutliers() called");  
     //keywords 
@@ -176,7 +193,7 @@ function fillModelWithOutliers(){
     RESULTS.Outliers = Outliers; 
      
 }
-      
+       
                         /***** Helper Functions *******/
 
 

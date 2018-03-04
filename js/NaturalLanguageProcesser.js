@@ -36,10 +36,9 @@ module.exports = function(req, res) {
         if (err)
           console.log('error:', err);
         else
-          // console.log(JSON.stringify(response, null, 2));
-          results = console.log(JSON.stringify(response, null, 2));
+          console.log(JSON.stringify(response, null, 2));
           // console.log( "parsed = " + response);
-          res.send(response);
+          res.send(response); 
         });
 
   }

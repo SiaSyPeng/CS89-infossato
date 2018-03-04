@@ -9,6 +9,7 @@ body {
 .inputContainer {
   background-color: #73CADE;
   padding: 10px;
+  height: 100vh; 
 }
 
 .inputAnalysis {

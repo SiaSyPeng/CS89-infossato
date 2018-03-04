@@ -29,16 +29,17 @@ module.exports = function(req, res) {
       next(error);
     } else {
       //results = console.log(JSON.stringify(response, null, 2));
-      if (response.aggregations){
-          console.log('here');
-          var numberOfArticles = JSON.stringify(response.matching_results, null, 2);
-          var aggregations = JSON.stringify(response.aggregations, null, 2);
-          var top5Articles = JSON.stringify(response.results, null, 2);
-          console.log( "parsed " + numberOfArticles +
-          " articles and the aggregation is "+ aggregations +
-          " top5Articles " + top5Articles
-        );
-      }
+
+      console.log('here');
+      var numberOfArticles = JSON.stringify(response.matching_results, null, 2);
+      var aggregations = JSON.stringify(response.aggregations, null, 2);
+      var top5Articles = JSON.stringify(response.results, null, 2);
+      var results = "parsed " + numberOfArticles +
+      " articles and the aggregation is "+ aggregations +
+      " top5Articles " + top5Articles
+    
+
+      res.send(results);
       //console.log(response)
       //res.send(response);
       //console.log(JSON.stringify(response, null, 2));

@@ -7,17 +7,17 @@ var express = require('express');
         password: 'qpUYARBca7hk',
         version_date: '2018-02-22'
       });
- 
+
 
 module.exports = function(req, res) {
 
      // console.log("the content received by NLProcessor is: " + req.body.input);
       var content_type = req.body.content_type;
-    //  console.log("content_type recieved at NLProcessor server :" +  content_type); 
- 
-   
-      //NLU parameters 
-      var params = { 
+    //  console.log("content_type recieved at NLProcessor server :" +  content_type);
+
+
+      //NLU parameters
+      var params = {
       [content_type] : req.body.input,
       'features': {
           'keywords': {
@@ -28,8 +28,8 @@ module.exports = function(req, res) {
           'emotion': {},
           'sentiment': {},
           'concepts': {'limit': 4}
-        }  
-      }; 
+        }
+      };
 
       //call the NLU API analyze doc
       natural_language_understanding.analyze(params, function(err, response) {

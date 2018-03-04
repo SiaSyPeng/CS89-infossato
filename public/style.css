@@ -2,19 +2,48 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+.display-1 {
+  font-size: 48px;
+  color: black;
+}
+
+.title {
+    text-align: right;
+    padding-right: 40px;
+}
+
 .titleBox{
-  background-color: #3E9DC1;
+  background-repeat: no-repeat;
+  background-image: url(pictures/cover.jpg);
+  background-position: bottom left;
+  padding-top: 250px;
+  padding-bottom: 200px;
+}
+
+.form-check {
+  padding: 5px;
+}
+
+.radioButtons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .inputContainer {
+  padding-bottom: 140px;
+  padding-top: 150px;
   background-color: #73CADE;
-  padding: 10px;
-  height: 100vh; 
 }
 
 .inputAnalysis {
   background-color: #FFEEDF;
-  padding: 10px;
+  padding-bottom: 140px;
+  padding-top: 150px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .keyConcepts {
@@ -30,4 +59,50 @@ body {
 .relaventRead {
   background-color: #61A3CF;
   padding: 10px;
+}
+
+.btn-analyze {
+  color: #FFFFFF;
+  background-color: #18859E;
+  border-color: #000000;
+}
+
+.btn-analyze:hover,
+.btn-analyze:focus,
+.btn-analyze:active,
+.btn-analyze.active,
+.open .dropdown-toggle.btn-analyze {
+  color: #FFFFFF;
+  background-color: #0BA1C2;
+  border-color: #000000;
+}
+
+.btn-analyze:active,
+.btn-analyze.active,
+.open .dropdown-toggle.btn-analyze {
+  background-image: none;
+}
+
+.btn-analyze.disabled,
+.btn-analyze[disabled],
+fieldset[disabled] .btn-analyze,
+.btn-analyze.disabled:hover,
+.btn-analyze[disabled]:hover,
+fieldset[disabled] .btn-analyze:hover,
+.btn-analyze.disabled:focus,
+.btn-analyze[disabled]:focus,
+fieldset[disabled] .btn-analyze:focus,
+.btn-analyze.disabled:active,
+.btn-analyze[disabled]:active,
+fieldset[disabled] .btn-analyze:active,
+.btn-analyze.disabled.active,
+.btn-analyze[disabled].active,
+fieldset[disabled] .btn-analyze.active {
+  background-color: #18859E;
+  border-color: #000000;
+}
+
+.btn-analyze .badge {
+  color: #18859E;
+  background-color: #FFFFFF;
 }

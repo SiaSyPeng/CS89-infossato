@@ -56,10 +56,15 @@ body {
   padding: 10px;
 }
 
-.relaventRead {
+.relatedArticles {
   background-color: #61A3CF;
   padding: 10px;
 }
+
+.relatedArticles a{
+text-decoration:  none;
+display: block;
+} 
 
 .btn-analyze {
   color: #FFFFFF;

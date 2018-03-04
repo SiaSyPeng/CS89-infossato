@@ -18,6 +18,8 @@ module.exports = function(req, res) {
   const params = { query: concept,
     filter: "language:(english|en),crawl_date>2018-02-24T12:00:00-0500,crawl_date<2018-03-03T12:00:00-0500",
     aggregation: "term(enriched_text.sentiment.document.label)",
+    count: 5,
+    return: "title,url,host",
     environment_id: 'system',
     collection_id: 'news' }
 
@@ -31,7 +33,11 @@ module.exports = function(req, res) {
           console.log('here');
           var numberOfArticles = JSON.stringify(response.matching_results, null, 2);
           var aggregations = JSON.stringify(response.aggregations, null, 2);
-          console.log( "parsed " + numberOfArticles + " articles and the aggregation is "+ aggregations );
+          var top5Articles = JSON.stringify(response.results, null, 2);
+          console.log( "parsed " + numberOfArticles +
+          " articles and the aggregation is "+ aggregations +
+          " top5Articles " + top5Articles
+        );
       }
       //console.log(response)
       //res.send(response);

@@ -17,7 +17,7 @@ body {
   background-image: url(pictures/cover.jpg);
   background-position: bottom left;
   padding-top: 250px;
-  padding-bottom: 200px;
+  padding-bottom: 225px;
 }
 
 .form-check {
@@ -31,9 +31,25 @@ body {
   justify-content: center;
 }
 
+#testBut {
+  text-align: center;
+  background-color: #61A3CF;
+  padding: 40px;
+}
+
+#testButton {
+  font-size: 40px;
+  padding: 10px;
+  font-weight: bold;
+  color: white;
+  border: : 0;
+  background: none;
+}
+
+
 .inputContainer {
   padding-bottom: 140px;
-  padding-top: 150px;
+  padding-top: 200px;
   background-color: #73CADE;
 }
 
@@ -49,7 +65,7 @@ body {
 
 .keyConcepts {
   background-color: #A9C0DF;
-  padding: 10px;
+  padding: 40px;
 }
 
 #conceptBlock{
@@ -59,12 +75,12 @@ body {
 
 .conceptSentiment {
   background-color: #C5CDDF;
-  padding: 10px;
+  padding: 30px;
 }
 
 .relatedArticles {
   background-color: #61A3CF;
-  padding: 10px;
+  padding: 40px;
 }
 
 .relatedArticles a {

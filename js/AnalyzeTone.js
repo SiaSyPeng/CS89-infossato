@@ -30,7 +30,7 @@ console.log("content_type recieved at AnalyzeTone server :" +  content_type);
       else{
           //parse response and return results
           // console.log("Tone analyzer reached success");
-           results = console.log(JSON.stringify(response, null, 2));
+           //results = console.log(JSON.stringify(response, null, 2));
            //if (response.document_tone.tones ){
               // console.log( "parsed = " + response.document_tone.tones[0].tone_name );
            //}

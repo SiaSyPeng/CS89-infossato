@@ -81,7 +81,7 @@ function fillModelWithNLUResults(results){
 
     }
     //console.log("emotion indexed is : "+ Emotions[1] +":"+ EmotionScores[1]);
-     console.log("topEmotion is :"+ topEmotion[0]);
+    console.log("topEmotion is :"+ topEmotion[0]);
 
             //sentiment
     var Sentiment = NLUResults.sentiment.document;
@@ -102,6 +102,9 @@ function fillModelWithNLUResults(results){
 
 
     RESULTS.Concepts = Concepts;
+    $('#conceptBlock').append(document.createElement('h1').innerHTML = RESULTS.Concepts[0]);
+    queryConcept(RESULTS.Concepts);
+
  }
 
 
@@ -214,7 +217,7 @@ function getToneAnalysis(TextToAnalyze, content_type){
               type: 'POST',
               success: function(result) {
               fillModelWithToneAnalyzerResults(result);
-             // displayToneAnalysisResults(result);
+              displayToneAnalysisResults(result);
               },
               error: errorCB
           });
@@ -241,7 +244,7 @@ function getNLAnalysis(TextToAnalyze, content_type){
           url: '/services/AnalyzeNL',
           type: 'POST',
           success: function(result) {
-          //displayToneAnalysisResults(result);
+          displayNLAnalysisResults(result);
           fillModelWithNLUResults(result);
           },
           error: errorCB
@@ -255,54 +258,30 @@ function getNLAnalysis(TextToAnalyze, content_type){
 //Parse tone response
 function displayToneAnalysisResults(jsonResponse){
 
-    // results for the whole document
-    var tones = jsonResponse.document_tone.tones;
-    if (tones.length > 0){
-        $('.tone_responseBlock').append(document.createElement('h3').innerHTML = 'Results : Whole Document');
-
-      //  create results table
-        var table = document.createElement("table");
-        table.className = 'resultsTable';
-        table.innerHTML = '<tr><th>Tone</th><th>Score</th></tr>';
-        $('.tone_responseBlock').append(table);
-
-        for(var index = 0 ;index < tones.length; index++ ){
-            addToTable(tones[index].tone_name, tones[index].score);
+  var ctx = document.getElementById("toneChart").getContext('2d');
+  var toneChart = new Chart(ctx, {
+      type: 'polarArea',
+      data: {
+          labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
+          datasets: [{
+              data: [0.12, 0.9, 0.3, 0.5, 0.2, 0.10, 0.11],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(100, 159, 64, 0.2)',
+                'rgba(255, 20, 20, 0.2)'
+              ]
+          }],
+      },
+      options: {
+        animation: {
+          animateScale: true
         }
-    }
-
-
-
-
-
-   // results for the individual sentences
-    var sentencesTones = jsonResponse.sentences_tone;
-    if (sentencesTones.length > 0){
-        $('.tone_responseBlock').append(document.createElement('h3').innerHTML = 'Results : Sentences');
-
-        //  create results table for sentences
-        var table = document.createElement("table");
-        table.className = 'resultsTable_sentences';
-        table.innerHTML = '<tr><th>Sentence</th><th>Tone</th><th>Score</th></tr>';
-        $('.tone_responseBlock').append(table);
-
-        /****TO FIX*****/
-        //the following for loop needs some fixing. need to correctly pass the structure of the
-      //  toneAnalyzer response to access the individual sentences, their indentified tone and // // corresponding scores. You may reveal the structure of toneAnalyzer response by this line: console.log(" toneAnalyzer json response is : " + jsonResponse);
-
-        for(var index = 0 ;index < sentencesTones.length; index++ ){
-            var sentence = sentencesTones[index];
-            var text = sentence.text;
-            console.log("text is: " + sentence);
-            for(var index2 = 0 ;index2 < sentence.tones.length; index2++ ){
-                if (index2 = 0){                  addToTable_sentence(text,sentence.tones[index2].tone_name,sentence.tones[index2].score);
-                } else{
-                  addToTable_sentence("",sentence.tone_name,sentence.score);
-                }
-            }
-        }
-         /****END OF TO FIX*****/
-    }
+      }
+  });
 }
 
 function addToTable(toneName,score){
@@ -323,37 +302,38 @@ function addToTable_sentence(sentence, toneName,score){
  function displayNLAnalysisResults(jsonResponse){
 
      // results for the whole document
-     var sentiment = jsonResponse.sentiment.document.label;
+     //var sentiment = jsonResponse.sentiment.document.label;
 
      // console.log('emotion' + emotion);
-     console.log('sentiment' + sentiment);
+     //console.log('sentiment' + sentiment);
 
-     // if (emotion.length > 0){
-     //     // $('.nl_responseBlock').append(document.createElement('h3').innerHTML = 'Results : Whole Document');
-     //     $('.nl_responseBlock').append(document.createElement('h3').innerHTML=emotion);
-     //   //  create results table
-     //     // var table = document.createElement("table");
-     //     // table.className = 'resultsTable';
-     //     // table.innerHTML = '<tr><th>emotion</th><th>Score</th></tr>';
-     //     // $('.tone_responseBlock').append(table);
-     //     //
-     //     // for(var index = 0 ;index < tones.length; index++ ){
-     //     //     addToTable(tones[index].tone_name, tones[index].score);
-     //     // }
-     //
-     // }
- }
+     var ctx = document.getElementById("emotionChart").getContext('2d');
+     var emotionChart = new Chart(ctx, {
+         type: 'radar',
+         data: {
+             labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
+             datasets: [{
+                 label: 'Emotions',
+                 data: [12, 19, 3, 5, 2],
+                 backgroundColor: [
+                   'rgba(255, 99, 132, 0.2)',
+                 ],
+                 borderColor: [
+                     'rgba(255,99,132,1)',
+                 ],
+                 borderWidth: 1,
+                 pointBackgroundColor: 'rgba(255, 20, 20, 0.8)'
 
-     //TODO
-   /* Add for functions to revise the display, make it more intuitive*/
+             }]
+         },
+         options: {
+             scales: {
+                 display: true
+             }
+         }
+     });
 
-
-
-                    /***** End of Helper Functions *******/
-
-
-                    /***** Event Handlers *******/
-
+}
 
   function handleSubmitText(TextToAnalyse) {
      // when analyze button is hit,
@@ -384,7 +364,7 @@ function addToTable_sentence(sentence, toneName,score){
           url: '/services/AnalyzeSentiment',
           type: 'POST',
           success: function(result) {
-          displayToneAnalysisResults(result);
+          displayDiscoveryAnalysis(result);
          },
           error: errorCB
       });
@@ -394,63 +374,38 @@ function addToTable_sentence(sentence, toneName,score){
   function displayDiscoveryAnalysis(result) {
     // get scores for overall Sentiment, assign it to global variable OverallSentimentScore
     // in array format, corresponding to the order of positive, negative, Neutral
-    OverallSentimentScore = [858, 758, 71];
-    console.log(result);
+    // OverallSentimentScore = [858, 758, 71];
+    // console.log(result);
+    console.log('in analysis');
+    var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
+    var conceptSentimentChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ["Positive", "Neutral", "Negative"],
+            datasets: [{
+                data: OverallSentimentScore,
+                backgroundColor: [
+                  'rgb(220, 184, 203)',
+                  'rgb(204,215,228)',
+                  'rgb(206,234,247)'
+                ],
+                borderColor: [
+                    'rgb(255,255,255)',
+                ],
+                borderWidth: 1
+            }],
+
+        },
+        options: {
+            animation: {
+                animateRotate: true
+            }
+        }
+    });
   }
   /*
    * All the graphs
    */
-
-  var ctx = document.getElementById("toneChart").getContext('2d');
-  var toneChart = new Chart(ctx, {
-      type: 'polarArea',
-      data: {
-          labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
-          datasets: [{
-              data: [0.12, 0.9, 0.3, 0.5, 0.2, 0.10, 0.11],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(100, 159, 64, 0.2)',
-                'rgba(255, 20, 20, 0.2)'
-              ]
-          }],
-      },
-      options: {
-        animation: {
-          animateScale: true
-        }
-      }
-  });
-
-  var ctx = document.getElementById("emotionChart").getContext('2d');
-  var emotionChart = new Chart(ctx, {
-      type: 'radar',
-      data: {
-          labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
-          datasets: [{
-              label: 'Emotions',
-              data: [12, 19, 3, 5, 2],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-              ],
-              borderWidth: 1,
-              pointBackgroundColor: 'rgba(255, 20, 20, 0.8)'
-
-          }]
-      },
-      options: {
-          scales: {
-              display: true
-          }
-      }
-  });
 
   var ctx = document.getElementById("keyEmotionChart").getContext('2d');
   var keyEmotionChart = new Chart(ctx, {
@@ -543,32 +498,6 @@ function addToTable_sentence(sentence, toneName,score){
       options: {
           scales: {
               display: true
-          }
-      }
-  });
-
-  var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
-  var conceptSentimentChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-          labels: ["Positive", "Neutral", "Negative"],
-          datasets: [{
-              data: OverallSentimentScore,
-              backgroundColor: [
-                'rgb(220, 184, 203)',
-                'rgb(204,215,228)',
-                'rgb(206,234,247)'
-              ],
-              borderColor: [
-                  'rgb(255,255,255)',
-              ],
-              borderWidth: 1
-          }],
-
-      },
-      options: {
-          animation: {
-              animateRotate: true
           }
       }
   });

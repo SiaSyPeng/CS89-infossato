@@ -3,53 +3,22 @@
  //Results variables
 var ToneAnalyzerResults;
 var NLUResults;
-var Overall = []; 
+var Overall = [];  
 var RESULTS = {};   
 var topEmotion = [];  
-var OverallSentimentScore1 =  [858, 758, 71];  
+var OverallSentimentScore1 =  [858, 758, 71];    
 var concepts = ['Dartmouth']; 
 var DiscoveryResponse;
-/*  
-
  
-//    var Emotions = ['sadness', 'joy', 'fear','disgust','anger']; 
- 
-  
-
-  var Tones{
-    'analytical': ,
-    'confident': ,
-    'tentative':
-  };
-
-
-var Overall{ Tones, Emotions, Sentiment };
 
 
 
-var Keywords{};        //could be any number of words, each with an emotion-score pair
-    for (index=0; index < ;index++){
-     keywords[sth[index]] = {sth[index].tone,sth[index].score};
-    }
 
 
-var Sentences{};         //could be any number of sentences , each with an emotion-score pair
-  for (index=0; index < ;index++){
-     sentences[sth[index]] = {sth[index].tone,sth[index].score};
-}
-
-var Outliers{keywords,sentences};
-
-var Concepts{};         //could be any number of word-score pairs
-  for (index=0; index < ;index++){
-     sentences[sth[index]] = sth[index].score;
-  }
+            /***********Results Parsing Functions **********/
 
 
-var TotalResults{overall,concepts,outliers};
-*/
-
-function fillModelWithDiscoveryResults(DiscoveryResponse){ 
+function fillModelWithDiscoveryResults(DiscoveryResponse){
     //console.log("Entered fillModelWithDiscoveryResults"); 
     var DiscoveryResults = [];  
     RESULTS.DiscoveryResults = DiscoveryResults;
@@ -79,6 +48,7 @@ function fillModelWithDiscoveryResults(DiscoveryResponse){
     }
 
     RESULTS.DiscoveryResults.relatedArticles = relatedArticles; 
+    listRelatedArticles(relatedArticles);   
 }
      
    
@@ -99,9 +69,9 @@ function fillModelWithToneAnalyzerResults(results){
     console.log(ToneScores);
     console.log(Tones);
     //FinalToneScores = ToneScores;
-    displayToneAnalysisResults();
+    displayToneAnalysisResults(); 
 
-}
+} 
  
 
 function fillModelWithNLUResults(results){
@@ -146,14 +116,14 @@ function fillModelWithNLUResults(results){
     }
 
 
-
     RESULTS.Concepts = Concepts;
-    $('#conceptBlock').append(document.createElement('h1').innerHTML = RESULTS.Concepts[0]);
-    queryConcept(RESULTS.Concepts);
+    console.log("Concepts extracted are" + Concepts );  
+    $('#conceptBlock').append(document.createElement('h1').innerHTML = Concepts[0]);
+    //queryConcept(Concepts); 
 
  }
 
-
+ 
 
 // compares values from both ToneAnalyzer and NLU, so call after both requests called
 function fillModelWithOutliers(){
@@ -228,8 +198,15 @@ function fillModelWithOutliers(){
 
 }
 
-                        /***** Helper Functions *******/
 
+
+            /***********END of Results Parsing Functions **********/
+
+
+
+
+
+                        /***** Helper Functions *******/
 
 
 
@@ -244,62 +221,62 @@ function errorCB(jqXHR, textStatus, err){
 }
 
 
-//ajax request to server
 function getToneAnalysis(TextToAnalyze, content_type){
-
-  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
+    
+  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
     if (typeof content_type === 'undefined' || content_type === null || content_type == 'text') {
         var content_type = 'plain';    //make plain text the default content type
         console.log('ToneAnalyzer content_type changed to'+ content_type);
-    }
-
+    } 
+   
     if (content_type != 'url'){   //dont send ToneAnalyzer request if the type is url
-
-       let info = {input : TextToAnalyze, content_type: 'text/'+content_type};
+      
+       let info = {input : TextToAnalyze, content_type: 'text/'+content_type}; 
        $.ajax({
               contentType: 'application/json',
               data: JSON.stringify(info),
-              url: '/services/AnalyzeTone',
+              url: '/services/AnalyzeTone', 
               type: 'POST',
               success: function(result) {
               fillModelWithToneAnalyzerResults(result);
+              fillModelWithOutliers();  //call fillModelWithOutliers() after all results are returned to since it accesses values from both results
               },
-              error: errorCB
+              error: errorCB  
           });
        console.log("ajax sent");
     }
 
-}
+}  
 
 
 
 function getNLAnalysis(TextToAnalyze, content_type){
-
-  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
+    
+   // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
     if (typeof content_type === 'undefined' || content_type === null) {
         var content_type = 'text';    //make plain text the default content type
         console.log('NLU content_type changed to '+ content_type);
     }
-
-
-   let info = {input : TextToAnalyze, content_type: content_type};
+   
+        
+   let info = {input : TextToAnalyze, content_type: content_type}; 
    $.ajax({
           contentType: 'application/json',
           data: JSON.stringify(info),
-          url: '/services/AnalyzeNL',
-          type: 'POST',
-          success: function(result) {
-          fillModelWithNLUResults(result);
-          },
+          url: '/services/AnalyzeNL', 
+          type: 'POST',  
+          success: function(result) {              
+          getToneAnalysis(TextToAnalyze, content_type);   //call AnalyzeTone after NLU returns success
+          fillModelWithNLUResults(result);  
+          },  
           error: errorCB
-      });
-   console.log(" NLAnalysis ajax sent");
+      }); 
+   console.log(" NLAnalysis ajax sent");      
 }
 
 
 
 
-//Parse tone response
 function displayToneAnalysisResults(jsonResponse){
 
   var ctx = document.getElementById("toneChart").getContext('2d');
@@ -328,21 +305,22 @@ function displayToneAnalysisResults(jsonResponse){
   });
 }
 
-function addToTable(toneName,score){
-   var toneHTML = '<td>' +toneName+ '</td><td>' +score+ '</td>';
-   var tableRow = document.createElement("tr");
-   tableRow.innerHTML = toneHTML;
-    $('.resultsTable').append(tableRow);
-}
 
-function addToTable_sentence(sentence, toneName,score){
-   var toneHTML = '<td>' +sentence+ '<td>' +toneName+ '</td><td>' +score+'</td>';
-   var tableRow = document.createElement("tr");
-   tableRow.innerHTML = toneHTML;
-    $('.resultsTable_sentences').append(tableRow);
+function listRelatedArticles(relatedArticlesArray){
+    //delete existing list
+    $('.relatedArticles').remove(); 
+    
+    for(var index = 0 ;index < relatedArticlesArray.length; index++ ){       
+        var concept = document.createElement("a");
+        article.href = relatedArticlesArray[index][0];
+        article.innerHTML = relatedArticlesArray[index][1]; //set title as url
+        $('.relatedArticles').append(article);  
+     }
 }
+ 
+ 
 
-//Parse tone response
+
  function displayNLAnalysisResults(jsonResponse){
 
      // results for the whole document
@@ -384,7 +362,6 @@ function addToTable_sentence(sentence, toneName,score){
      var content_type =  TextHTMLOrURL();
      getToneAnalysis(TextToAnalyse, content_type);
      getNLAnalysis(TextToAnalyse, content_type);
-    // displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
   }
 
 
@@ -420,8 +397,6 @@ function addToTable_sentence(sentence, toneName,score){
   function displayDiscoveryAnalysis(result) {
     // get scores for overall Sentiment, assign it to global variable OverallSentimentScore
     // in array format, corresponding to the order of positive, negative, Neutral
-    // OverallSentimentScore = [858, 758, 71];
-    // console.log(result);
     console.log('in analysis');
     var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
     var conceptSentimentChart = new Chart(ctx, {
@@ -574,10 +549,7 @@ function addToTable_sentence(sentence, toneName,score){
       }
   });
 
-  //TODO
- /* Add  more event handlers  to handle events that occur when user
-clicks on buttons or tabs etc*/
-
+  
                   /***** End of Event Handlers *******/
 
 
@@ -607,9 +579,4 @@ clicks on buttons or tabs etc*/
   });
 
  
-
-   //TODO
-   /* Add more buttons or tabs to the page then add more event listners to make the page interactive*/
-
-
                   /***** End of Event Listeners *******/

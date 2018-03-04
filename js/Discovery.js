@@ -8,6 +8,7 @@ var discovery = new DiscoveryV1({
 });
 
 
+ 
 
 module.exports = function(req, res) {
   console.log('now in discovery.js');
@@ -40,7 +41,7 @@ module.exports = function(req, res) {
       " top5Articles " + top5Articles
     
 
-       //console.log(response)
+    //console.log(response)
       res.send(response);
      } 
   }); 

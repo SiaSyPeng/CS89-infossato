@@ -7,13 +7,9 @@ var discovery = new DiscoveryV1({
   version_date: '2017-11-07'
 });
 
-const params = { query: '"Dartmouth College"',
-  filter: 'language:(english|en),crawl_date>2018-02-24T12:00:00-0500,crawl_date<2018-03-03T12:00:00-0500',
-  aggregations: [
-    "term(host).term(enriched_text.sentiment.document.label)",
-    "term(enriched_text.sentiment.document.label)"
-  ],
-  count: 1,
+const params = { query: "\"Dartmouth College\"",
+  filter: "language:(english|en),crawl_date>2018-02-24T12:00:00-0500,crawl_date<2018-03-03T12:00:00-0500",
+  aggregation: "term(enriched_text.sentiment.document.label)",
   environment_id: 'system',
   collection_id: 'news' }
 

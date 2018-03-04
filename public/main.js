@@ -6,12 +6,10 @@ var NLUResults;
 var Overall = [];
 var RESULTS = {};
 var topEmotion = [];
-var OverallSentimentScore1 =  [858, 758, 71];
-var concepts = ['Dartmouth'];
-var DiscoveryResponse;
-
-
-
+var DiscoveryResults = [];
+RESULTS.DiscoveryResults = DiscoveryResults;
+var DiscoveryOverallSentimentScore = [];
+//var OverallSentimentScore1 =  [858, 758, 71];
 
 
 
@@ -19,10 +17,6 @@ var DiscoveryResponse;
 
 
 function fillModelWithDiscoveryResults(DiscoveryResponse){
-    //console.log("Entered fillModelWithDiscoveryResults");
-    var DiscoveryResults = [];
-    RESULTS.DiscoveryResults = DiscoveryResults;
-     // OverallSentimentScore
     var OverallSentimentScore = [];
     var sentiments = DiscoveryResponse.aggregations[0].results;
     if (sentiments){
@@ -33,8 +27,10 @@ function fillModelWithDiscoveryResults(DiscoveryResponse){
         }
     }
 
+    DiscoveryOverallSentimentScore = OverallSentimentScore;
     RESULTS.DiscoveryResults.OverallSentimentScore = OverallSentimentScore;
-
+    //show graph
+    displayDiscoveryAnalysis(DiscoveryOverallSentimentScore);
 
     //related articles
    var articles = DiscoveryResponse.results;
@@ -67,7 +63,7 @@ function fillModelWithToneAnalyzerResults(results){
     RESULTS.Overall = Overall;
 
     console.log("Tonescores are "+ ToneScores);
-    console.log("Tone are "+Tones);
+    console.log("Tones are "+Tones);
     FinalToneScores = ToneScores;
     displayToneAnalysisResults();
 
@@ -87,22 +83,22 @@ function fillModelWithNLUResults(results){
         EmotionScores[index] = emotions[index];
         if (emotions[index] > topEmotionScore){
             topEmotionScore = emotions[index];
-            topEmotion =[ Emotions[index], emotions[index] ];   // store [emotions, score]
+            topEmotion =[ Emotions[index], emotions[index] ];   // store [emotion, score]
         }
 
     }
     //console.log("emotion indexed is : "+ Emotions[1] +":"+ EmotionScores[1]);
     console.log("topEmotion is :"+ topEmotion[0]);
 
+
             //sentiment
-    var Sentiment = NLUResults.sentiment.document;
+    var Sentiment = NLUResults.sentiment.document;  //sentiment has properties, score and label
+    console.log("sentiment =: "+ Sentiment);
     Overall.push(EmotionScores);
     Overall.push(Sentiment);
 
     FinalEmotionScores = EmotionScores;
-    displayNLAnalysisResults();
-
-
+    displayEmotionsInDocument(EmotionScores);
      //console.log("Sentiment in overall :" +Overall[2].label);
 
 
@@ -122,6 +118,7 @@ function fillModelWithNLUResults(results){
 
  }
 
+ }
 
 
 // compares values from both ToneAnalyzer and NLU, so call after both requests called
@@ -310,7 +307,6 @@ function queryConcept(Concepts) {
 
 
 
-
                 /***********Display Functions **********/
 
 function displayToneAnalysisResults(jsonResponse){
@@ -342,23 +338,8 @@ function displayToneAnalysisResults(jsonResponse){
 }
 
 
-function listRelatedArticles(relatedArticlesArray){
-    //delete existing list
-    $('.articles').find('a').remove();
 
-    for(var index = 0 ;index < relatedArticlesArray.length; index++ ){
-        var article = document.createElement("a");
-        article.href = relatedArticlesArray[index][1];
-        article.innerHTML = relatedArticlesArray[index][0]; //set title as url
-        //one article per line
-        console.log(JSON.stringify(article));
-        $('.articles').append(article);
-     }
-}
-
-
-
- function displayNLAnalysisResults(jsonResponse){
+ function displayEmotionsInDocument(EmotionScoresArray){
 
      // results for the whole document
      //var sentiment = jsonResponse.sentiment.document.label;
@@ -395,8 +376,7 @@ function listRelatedArticles(relatedArticlesArray){
 }
 
 
-
-  function displayDiscoveryAnalysis(result) {
+  function displayDiscoveryAnalysis(DiscoveryOverallSentimentScore) {
     // get scores for overall Sentiment, assign it to global variable OverallSentimentScore
     // in array format, corresponding to the order of positive, negative, Neutral
     console.log('in analysis');
@@ -404,9 +384,9 @@ function listRelatedArticles(relatedArticlesArray){
     var conceptSentimentChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ["Positive", "Neutral", "Negative"],
+            labels: ["Positive", "Negative", "Neutral"],
             datasets: [{
-                data: OverallSentimentScore,
+                data: DiscoveryOverallSentimentScore,
                 backgroundColor: [
                   'rgb(220, 184, 203)',
                   'rgb(204,215,228)',
@@ -427,10 +407,26 @@ function listRelatedArticles(relatedArticlesArray){
     });
   }
 
+
+
+function listRelatedArticles(relatedArticlesArray){
+    //delete existing list
+    $('.relatedArticles').find('a').remove();
+
+    for(var index = 0 ;index < relatedArticlesArray.length; index++ ){
+        var article = document.createElement("a");
+        article.href = relatedArticlesArray[index][1];
+        article.innerHTML = relatedArticlesArray[index][0]; //set title as url
+        //one article per line
+        $('.relatedArticles').append(article);
+     }
+}
+
+
   /*
    * All the graphs
    */
-
+/*
   var ctx = document.getElementById("keyEmotionChart").getContext('2d');
   var keyEmotionChart = new Chart(ctx, {
       type: 'radar',
@@ -525,6 +521,7 @@ function listRelatedArticles(relatedArticlesArray){
           }
       }
   });
+<<<<<<< HEAD
 
   var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
   var conceptSentimentChart = new Chart(ctx, {
@@ -551,12 +548,9 @@ function listRelatedArticles(relatedArticlesArray){
           }
       }
   });
+=======
 
-
-                    /***** End of Display Functions *******/
-
-
-
+*/
 
 
 

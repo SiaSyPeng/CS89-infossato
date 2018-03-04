@@ -17,7 +17,7 @@
     <div class="container-fluid text-center titleBox">
       <div class="title">
         <h1 class="display-1">THIS IS SENTIENT</h1>
-        <h2> WEB APP | YOUR NEW READING COMPANION</small></h2>
+        <h2> YOUR NEW READING COMPANION</small></h2>
       </div>
     </div>
     <div class="container-fluid inputContainer">
@@ -30,7 +30,7 @@
             <label class="form-check-label" for="exampleRadios1">
               Text
             </label>
-          </div> 
+          </div>
           <div class="form-check">
             <input class="form-check-input content_type" type="radio" name="exampleRadios" id="URLRadio" value="option2">
             <label class="form-check-label" for="exampleRadios2">
@@ -68,6 +68,13 @@
     </div> -->
   </div>
 
+  <div id="testBut">
+      <a class="smooth_discovery" href="#discovery_link">
+        <button type="button" class="btn-analyze" id="testButton">See the larger context</button>
+      </a>
+  </div>
+
+  <a id="discovery_link"></a>
   <div class="container-fluid text-center keyConcepts">
     <h2>key Concept From the Text:</h2>
     <div class="text-center" id="conceptBlock"></div>
@@ -85,7 +92,7 @@
   </div>
 
   <div class="container-fluid text-center relatedArticles">
-    <h2>Relevant Articles</h2>
+    <h2>Recommended Articles for Further Reading</h2>
   </div>
 </div>
 
@@ -99,6 +106,12 @@ $('.smooth_graphs').on('click', function() {
   console.log('hi');
   $('html, body').animate({
     scrollTop: $('#graphs_link').offset().top
+  }, 1000);
+});
+$('.smooth_discovery').on('click', function() {
+  console.log('hi');
+  $('html, body').animate({
+    scrollTop: $('#discovery_link').offset().top
   }, 1000);
 });
 </script>

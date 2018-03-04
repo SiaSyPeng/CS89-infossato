@@ -17,7 +17,7 @@ body {
   background-image: url(pictures/cover.jpg);
   background-position: bottom left;
   padding-top: 250px;
-  padding-bottom: 200px;
+  padding-bottom: 225px;
 }
 
 .form-check {
@@ -31,9 +31,14 @@ body {
   justify-content: center;
 }
 
+#testBut {
+  text-align: center;
+  background-color: #61A3CF;
+  padding: 20px;
+}
 .inputContainer {
   padding-bottom: 140px;
-  padding-top: 150px;
+  padding-top: 200px;
   background-color: #73CADE;
 }
 
@@ -65,6 +70,7 @@ body {
 .relatedArticles {
   background-color: #61A3CF;
   padding: 10px;
+  padding-bottom: 20px;
 }
 
 .relatedArticles a {

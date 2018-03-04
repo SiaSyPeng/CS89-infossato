@@ -8,6 +8,7 @@ var discovery = new DiscoveryV1({
 });
 
 
+ 
 
 module.exports = function(req, res) {
   console.log('now in discovery.js');
@@ -27,7 +28,8 @@ module.exports = function(req, res) {
     console.log(params);
     if (error) {
       next(error);
-    } else {
+    } else 
+    {
       //results = console.log(JSON.stringify(response, null, 2));
 
       console.log('here');
@@ -39,13 +41,10 @@ module.exports = function(req, res) {
       " top5Articles " + top5Articles
     
 
-      res.send(results);
-      //console.log(response)
-      //res.send(response);
-      //console.log(JSON.stringify(response, null, 2));
-    }
-  });
-  //console.log('exited');
+    //console.log(response)
+      res.send(response);
+     } 
+  }); 
 }
 
 // discovery.createEnvironment({

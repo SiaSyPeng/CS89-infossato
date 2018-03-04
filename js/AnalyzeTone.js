@@ -27,13 +27,9 @@ console.log("content_type recieved at AnalyzeTone server :" +  content_type);
     tone_analyzer.tone(params, function(error, response){
       if (error)
         console.log('error:', error);
-      else{
-          //parse response and return results
-          // console.log("Tone analyzer reached success");
-           //results = console.log(JSON.stringify(response, null, 2));
-           //if (response.document_tone.tones ){
-              // console.log( "parsed = " + response.document_tone.tones[0].tone_name );
-           //}
+      else{ 
+           console.log("Tone analyzer reached success");
+           console.log(JSON.stringify(response, null, 2));
            res.send(response);
          }
     });

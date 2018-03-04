@@ -54,31 +54,39 @@
 
   <a id="graphs_link"></a>
   <div class="container-fluid inputAnalysis">
-    <div class="container row">
-      <div class="col-md-6">
-        <canvas id="toneChart"></canvas>
+    <div class="graphs">
+      <div class="container row">
+        <div class="col-md-6">
+          <canvas id="toneChart"></canvas>
+        </div>
+        <div class="col-md-6">
+          <canvas id="emotionChart"></canvas>
+        </div>
       </div>
-      <div class="col-md-6">
-        <canvas id="emotionChart"></canvas>
+      <div class="container row">
+        <div class="col-md-6">
+          <canvas id="senEmotionChart"></canvas>
+        </div>
+        <div class="col-md-6">
+          <canvas id="keyEmotionChart"></canvas>
+        </div>
       </div>
     </div>
-    <div class="container row">
-      <div class="col-md-6">
-        <canvas id="senEmotionChart"></canvas>
-      </div>
-      <div class="col-md-6">
-        <canvas id="keyEmotionChart"></canvas>
-      </div>
+    <div id="testBut">
+      <a class="smooth_discovery" href="#discovery_link">
+        <button type="button" class="btn-analyze" id="testButton">See the larger context</button>
+      </a>
     </div>
   </div>
 
+  <a id="discovery_link"></a>
   <div class="container-fluid text-center keyConcepts">
-    <h3>some key concepts</h3>
+    <h2>How does your article compare?</h2>
+    <div class="text-center" id="conceptBlock"></div>
   </div>
 
   <div class="container-fluid conceptSentiment">
     <div class="container">
-      <button type="button" class="btn-analyze" id="testBut">Discovery</button>
       <div class="container-fluid row">
         <div class="col-md-6 col-md-offset-3">
           <canvas id="conceptSentimentChart"></canvas>
@@ -87,20 +95,14 @@
     </div>
   </div>
 
-  <div class="container-fluid text-center relaventRead">
-    <h2>Relevant Articles</h2>
-    <p> i.e..</p>
+  <div class="container-fluid text-center relatedArticles">
+    <h2>Recommended Articles for Further Reading</h2>
+    <div class="articles">
+
+    </div>
   </div>
 </div>
-<!--   //TODO
-/* Add more elements to popualte the page. More elements needed for when a user wants to
--know the tone of the overall document
--inspect an idividual sentence*
--check a fact
--provide a link to a news article
--upload a news file, .docx, .pdf ,.json,
--pretty much anything we think our app should do/
--->
+
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
@@ -113,8 +115,21 @@ $('.smooth_graphs').on('click', function() {
     scrollTop: $('#graphs_link').offset().top
   }, 1000);
 });
+$('.smooth_discovery').on('click', function() {
+  console.log('hi');
+  $('html, body').animate({
+    scrollTop: $('#discovery_link').offset().top
+  }, 1000);
+});
 </script>
 
-<!-- <script>
-</script> -->
+<!--   //Possible Extensions
+/* Add more elements to popualte the page. More elements needed for when a user wants to
+-know the tone of the overall document
+-inspect an idividual sentence*
+-check a fact
+-provide a link to a news article
+-upload a news file, .docx, .pdf ,.json,
+-pretty much anything we think our app should do/
+-->
 </html>

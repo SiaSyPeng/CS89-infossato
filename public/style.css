@@ -33,17 +33,29 @@ body {
 
 .inputContainer {
   padding-bottom: 140px;
-  padding-top: 150px;
+  padding-top: 200px;
   background-color: #73CADE;
+}
+
+.graphs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: 120px;
 }
 
 .inputAnalysis {
   background-color: #FFEEDF;
-  padding-bottom: 140px;
-  padding-top: 150px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  padding-bottom: 190px;
+
+}
+
+#testBut {
+  text-align: center;
+}
+
+#testButton {
+  
 }
 
 .keyConcepts {
@@ -57,11 +69,16 @@ body {
   text-align: center;
 }
 
-.relaventRead {
+.relatedArticles {
   background-color: #61A3CF;
   padding: 10px;
 }
 
+.relatedArticles a {
+text-decoration:  none;
+display: block;
+}
+ s
 .btn-analyze {
   color: #FFFFFF;
   background-color: #18859E;

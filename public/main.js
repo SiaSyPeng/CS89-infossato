@@ -6,46 +6,51 @@ var NLUResults;
 var Overall = [];
 var RESULTS = {};
 var topEmotion = [];
-var OverallSentimentScore =  [858, 758, 71];
-
-/*
+var OverallSentimentScore1 =  [858, 758, 71];
 var concepts = ['Dartmouth'];
-var OverallSentimentScore =  [858, 758, 71];
-//    var Emotions = ['sadness', 'joy', 'fear','disgust','anger'];
-
-
-  var Tones{
-    'analytical': ,
-    'confident': ,
-    'tentative':
-  };
-
-
-var Overall{ Tones, Emotions, Sentiment };
+var DiscoveryResponse;
 
 
 
-var Keywords{};        //could be any number of words, each with an emotion-score pair
-    for (index=0; index < ;index++){
-     keywords[sth[index]] = {sth[index].tone,sth[index].score};
+
+
+
+            /***********Results Parsing Functions **********/
+
+
+function fillModelWithDiscoveryResults(DiscoveryResponse){
+    //console.log("Entered fillModelWithDiscoveryResults");
+    var DiscoveryResults = [];
+    RESULTS.DiscoveryResults = DiscoveryResults;
+     // OverallSentimentScore
+    var OverallSentimentScore = [];
+    var sentiments = DiscoveryResponse.aggregations[0].results;
+    if (sentiments){
+     //    console.log("sentiments is defined");
+        for(var index = 0 ;index < sentiments.length; index++ ){
+            var sentimentScore =  Object.values(sentiments[index]);
+            OverallSentimentScore[index] =sentimentScore[1];
+        }
     }
 
+    RESULTS.DiscoveryResults.OverallSentimentScore = OverallSentimentScore;
 
-var Sentences{};         //could be any number of sentences , each with an emotion-score pair
-  for (index=0; index < ;index++){
-     sentences[sth[index]] = {sth[index].tone,sth[index].score};
+
+    //related articles
+   var articles = DiscoveryResponse.results;
+    var relatedArticles = [];
+   if (articles){
+        for(var index = 0 ;index < articles.length; index++ ){
+            var anArticle = Object.values(articles[index]);
+            var ArticleTitleAndUrl = [anArticle[3],anArticle[4]];
+            relatedArticles.push(ArticleTitleAndUrl);
+        }
+    }
+
+    RESULTS.DiscoveryResults.relatedArticles = relatedArticles;
+    listRelatedArticles(relatedArticles);
 }
 
-var Outliers{keywords,sentences};
-
-var Concepts{};         //could be any number of word-score pairs
-  for (index=0; index < ;index++){
-     sentences[sth[index]] = sth[index].score;
-  }
-
-
-var TotalResults{overall,concepts,outliers};
-*/
 
 function fillModelWithToneAnalyzerResults(results){
     ToneAnalyzerResults = results; //store resutls in a global var
@@ -60,6 +65,12 @@ function fillModelWithToneAnalyzerResults(results){
    // console.log("Tones is: " + Tones[0]);
     Overall.push(Tones);
     RESULTS.Overall = Overall;
+
+    console.log("Tonescores are "+ ToneScores);
+    console.log("Tone are "+Tones);
+    FinalToneScores = ToneScores;
+    displayToneAnalysisResults();
+
 }
 
 
@@ -85,8 +96,12 @@ function fillModelWithNLUResults(results){
 
             //sentiment
     var Sentiment = NLUResults.sentiment.document;
-    Overall.push(EmotionScores)
+    Overall.push(EmotionScores);
     Overall.push(Sentiment);
+
+    FinalEmotionScores = EmotionScores;
+    displayNLAnalysisResults();
+
 
      //console.log("Sentiment in overall :" +Overall[2].label);
 
@@ -102,8 +117,8 @@ function fillModelWithNLUResults(results){
 
 
     RESULTS.Concepts = Concepts;
-    $('#conceptBlock').append(document.createElement('h1').innerHTML = RESULTS.Concepts[0]);
-    queryConcept(RESULTS.Concepts);
+    console.log("Concepts extracted are" + Concepts );
+    queryConcept(Concepts);
 
  }
 
@@ -182,10 +197,20 @@ function fillModelWithOutliers(){
 
 }
 
+
+
+            /***********END of Results Parsing Functions **********/
+
+
+
+
+
+
+
+
+
+
                         /***** Helper Functions *******/
-
-
-
 
 function TextHTMLOrURL(){
    return $("#content_type").val();
@@ -198,7 +223,6 @@ function errorCB(jqXHR, textStatus, err){
 }
 
 
-//ajax request to server
 function getToneAnalysis(TextToAnalyze, content_type){
 
   // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
@@ -217,7 +241,7 @@ function getToneAnalysis(TextToAnalyze, content_type){
               type: 'POST',
               success: function(result) {
               fillModelWithToneAnalyzerResults(result);
-              displayToneAnalysisResults(result);
+              fillModelWithOutliers();  //call fillModelWithOutliers() after all results are returned to since it accesses values from both results
               },
               error: errorCB
           });
@@ -230,7 +254,7 @@ function getToneAnalysis(TextToAnalyze, content_type){
 
 function getNLAnalysis(TextToAnalyze, content_type){
 
-  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
+   // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
     if (typeof content_type === 'undefined' || content_type === null) {
         var content_type = 'text';    //make plain text the default content type
         console.log('NLU content_type changed to '+ content_type);
@@ -244,7 +268,7 @@ function getNLAnalysis(TextToAnalyze, content_type){
           url: '/services/AnalyzeNL',
           type: 'POST',
           success: function(result) {
-          displayNLAnalysisResults(result);
+          getToneAnalysis(TextToAnalyze, content_type);   //call AnalyzeTone after NLU returns success
           fillModelWithNLUResults(result);
           },
           error: errorCB
@@ -254,8 +278,41 @@ function getNLAnalysis(TextToAnalyze, content_type){
 
 
 
+function queryConcept(Concepts) {
+     console.log('Quering: ' + Concepts[0]);
+     getDiscoveryAnalysis(Concepts[0]);
+  }
 
-//Parse tone response
+  function getDiscoveryAnalysis(Concepts){
+     console.log("The concept about to be passed to ajax is : " + Concepts );
+     let info = {input : Concepts };
+     $.ajax({
+          contentType: 'application/json',
+          data: JSON.stringify(info),
+          url: '/services/AnalyzeSentiment',
+          type: 'POST',
+          success: function(result) {
+          DiscoveryResponse = result;
+          fillModelWithDiscoveryResults(result);
+
+         },
+          error: errorCB
+      });
+      console.log("ajax sent");
+  }
+
+
+
+                    /***** End of Helper Functions *******/
+
+
+
+
+
+
+
+                /***********Display Functions **********/
+
 function displayToneAnalysisResults(jsonResponse){
 
   var ctx = document.getElementById("toneChart").getContext('2d');
@@ -264,7 +321,7 @@ function displayToneAnalysisResults(jsonResponse){
       data: {
           labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
           datasets: [{
-              data: [0.12, 0.9, 0.3, 0.5, 0.2, 0.10, 0.11],
+              data: FinalToneScores,
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -284,21 +341,23 @@ function displayToneAnalysisResults(jsonResponse){
   });
 }
 
-function addToTable(toneName,score){
-   var toneHTML = '<td>' +toneName+ '</td><td>' +score+ '</td>';
-   var tableRow = document.createElement("tr");
-   tableRow.innerHTML = toneHTML;
-    $('.resultsTable').append(tableRow);
+
+function listRelatedArticles(relatedArticlesArray){
+    //delete existing list
+    $('.articles').find('a').remove();
+
+    for(var index = 0 ;index < relatedArticlesArray.length; index++ ){
+        var article = document.createElement("a");
+        article.href = relatedArticlesArray[index][1];
+        article.innerHTML = relatedArticlesArray[index][0]; //set title as url
+        //one article per line
+        console.log(JSON.stringify(article));
+        $('.articles').append(article);
+     }
 }
 
-function addToTable_sentence(sentence, toneName,score){
-   var toneHTML = '<td>' +sentence+ '<td>' +toneName+ '</td><td>' +score+'</td>';
-   var tableRow = document.createElement("tr");
-   tableRow.innerHTML = toneHTML;
-    $('.resultsTable_sentences').append(tableRow);
-}
 
-//Parse tone response
+
  function displayNLAnalysisResults(jsonResponse){
 
      // results for the whole document
@@ -314,7 +373,7 @@ function addToTable_sentence(sentence, toneName,score){
              labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
              datasets: [{
                  label: 'Emotions',
-                 data: [12, 19, 3, 5, 2],
+                 data: FinalEmotionScores,
                  backgroundColor: [
                    'rgba(255, 99, 132, 0.2)',
                  ],
@@ -335,47 +394,11 @@ function addToTable_sentence(sentence, toneName,score){
 
 }
 
-  function handleSubmitText(TextToAnalyse) {
-     // when analyze button is hit,
-     var content_type =  TextHTMLOrURL();
-     getToneAnalysis(TextToAnalyse, content_type);
-     getNLAnalysis(TextToAnalyse, content_type);
-    // displayToneAnalysisResults( getToneAnalysis(TextToAnalyse) );
-  }
 
-
-  $( "#testBut" ).on('click',
-  function(){
-     // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
-   queryConcept(concepts);
-  });
-
-  function queryConcept(Concepts) {
-     console.log('Quering: ' + Concepts[0]);
-     getDiscoveryAnalysis(Concepts[0]);
-  }
-
-  function getDiscoveryAnalysis(Concepts) {
-     console.log("The concept about to be passed to ajax is : " + Concepts );
-     let info = {input : Concepts };
-     $.ajax({
-          contentType: 'application/json',
-          data: JSON.stringify(info),
-          url: '/services/AnalyzeSentiment',
-          type: 'POST',
-          success: function(result) {
-          displayDiscoveryAnalysis(result);
-         },
-          error: errorCB
-      });
-      console.log("ajax sent");
-  }
 
   function displayDiscoveryAnalysis(result) {
     // get scores for overall Sentiment, assign it to global variable OverallSentimentScore
     // in array format, corresponding to the order of positive, negative, Neutral
-    // OverallSentimentScore = [858, 758, 71];
-    // console.log(result);
     console.log('in analysis');
     var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
     var conceptSentimentChart = new Chart(ctx, {
@@ -403,6 +426,7 @@ function addToTable_sentence(sentence, toneName,score){
         }
     });
   }
+
   /*
    * All the graphs
    */
@@ -501,9 +525,49 @@ function addToTable_sentence(sentence, toneName,score){
           }
       }
   });
-  //TODO
- /* Add  more event handlers  to handle events that occur when user
-clicks on buttons or tabs etc*/
+
+  var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
+  var conceptSentimentChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+          labels: ["Positive", "Neutral", "Negative"],
+          datasets: [{
+              data: OverallSentimentScore1,
+              backgroundColor: [
+                'rgb(220, 184, 203)',
+                'rgb(204,215,228)',
+                'rgb(206,234,247)'
+              ],
+              borderColor: [
+                  'rgb(255,255,255)',
+              ],
+              borderWidth: 1
+          }],
+
+      },
+      options: {
+          animation: {
+              animateRotate: true
+          }
+      }
+  });
+
+
+                    /***** End of Display Functions *******/
+
+
+
+
+
+
+
+                    /*****Event Handlers *******/
+
+ function handleSubmitText(TextToAnalyse) {
+     // when analyze button is hit,
+     var content_type =  TextHTMLOrURL();
+     getNLAnalysis(TextToAnalyse, content_type);
+}
 
                   /***** End of Event Handlers *******/
 
@@ -532,11 +596,6 @@ clicks on buttons or tabs etc*/
      // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
    alert("you did the URL");
   });
-
-
-
-   //TODO
-   /* Add more buttons or tabs to the page then add more event listners to make the page interactive*/
 
 
                   /***** End of Event Listeners *******/

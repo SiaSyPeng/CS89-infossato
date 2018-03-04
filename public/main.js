@@ -14,7 +14,8 @@ var DiscoveryResponse;
  
 //    var Emotions = ['sadness', 'joy', 'fear','disgust','anger']; 
  
- 
+  
+
   var Tones{
     'analytical': ,
     'confident': ,
@@ -94,8 +95,14 @@ function fillModelWithToneAnalyzerResults(results){
    // console.log("Tones is: " + Tones[0]);
     Overall.push(Tones);
     RESULTS.Overall = Overall;
-} 
 
+    console.log(ToneScores);
+    console.log(Tones);
+    //FinalToneScores = ToneScores;
+    displayToneAnalysisResults();
+
+}
+ 
 
 function fillModelWithNLUResults(results){
             //emotions
@@ -121,6 +128,10 @@ function fillModelWithNLUResults(results){
     var Sentiment = NLUResults.sentiment.document;
     Overall.push(EmotionScores);
     Overall.push(Sentiment);
+
+    FinalEmotionScores = EmotionScores;
+    displayNLAnalysisResults();
+
 
      //console.log("Sentiment in overall :" +Overall[2].label);
 
@@ -252,7 +263,6 @@ function getToneAnalysis(TextToAnalyze, content_type){
               type: 'POST',
               success: function(result) {
               fillModelWithToneAnalyzerResults(result);
-              displayToneAnalysisResults(result);
               },
               error: errorCB
           });
@@ -279,7 +289,6 @@ function getNLAnalysis(TextToAnalyze, content_type){
           url: '/services/AnalyzeNL',
           type: 'POST',
           success: function(result) {
-          displayNLAnalysisResults(result);
           fillModelWithNLUResults(result);
           },
           error: errorCB
@@ -299,7 +308,7 @@ function displayToneAnalysisResults(jsonResponse){
       data: {
           labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
           datasets: [{
-              data: [0.12, 0.9, 0.3, 0.5, 0.2, 0.10, 0.11],
+              data: FinalToneScores,
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -349,7 +358,7 @@ function addToTable_sentence(sentence, toneName,score){
              labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
              datasets: [{
                  label: 'Emotions',
-                 data: [12, 19, 3, 5, 2],
+                 data: FinalEmotionScores,
                  backgroundColor: [
                    'rgba(255, 99, 132, 0.2)',
                  ],

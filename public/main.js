@@ -114,14 +114,13 @@ function fillModelWithNLUResults(results){
     for(var index = 0 ;index < NLUResults.concepts.length; index++){
         Concepts.push(NLUResults.concepts[index].text);
     }
-
+ 
 
     RESULTS.Concepts = Concepts;
     console.log("Concepts extracted are" + Concepts );  
-    $('#conceptBlock').append(document.createElement('h1').innerHTML = Concepts[0]);
-    //queryConcept(Concepts); 
+    queryConcept(Concepts); 
 
- }
+ } 
 
  
 
@@ -308,18 +307,19 @@ function displayToneAnalysisResults(jsonResponse){
 
 function listRelatedArticles(relatedArticlesArray){
     //delete existing list
-    $('.relatedArticles').remove(); 
-    
+    $('.relatedArticles').find('a').remove(); 
+          
     for(var index = 0 ;index < relatedArticlesArray.length; index++ ){       
-        var concept = document.createElement("a");
-        article.href = relatedArticlesArray[index][0];
-        article.innerHTML = relatedArticlesArray[index][1]; //set title as url
+        var article = document.createElement("a");
+        article.href = relatedArticlesArray[index][1];
+        article.innerHTML = relatedArticlesArray[index][0]; //set title as url
+        //one article per line 
         $('.relatedArticles').append(article);  
      }
-}
+} 
+  
  
  
-
 
  function displayNLAnalysisResults(jsonResponse){
 

@@ -48,19 +48,19 @@ var Concepts{};         //could be any number of word-score pairs
 var TotalResults{overall,concepts,outliers};
 */
 
-function fillModelWithDiscoveryResults(DiscoveryResponse){
-    console.log("Entered fillModelWithDiscoveryResults"); 
+function fillModelWithDiscoveryResults(DiscoveryResponse){ 
+    //console.log("Entered fillModelWithDiscoveryResults"); 
     var DiscoveryResults = [];  
     RESULTS.DiscoveryResults = DiscoveryResults;
      // OverallSentimentScore
     var OverallSentimentScore = [];
     var sentiments = DiscoveryResponse.aggregations[0].results;   
     if (sentiments){  
-         console.log("sentiments is defined"); 
+     //    console.log("sentiments is defined"); 
         for(var index = 0 ;index < sentiments.length; index++ ){
             var sentimentScore =  Object.values(sentiments[index]);
             OverallSentimentScore[index] =sentimentScore[1];
-        }
+        } 
     } 
     
     RESULTS.DiscoveryResults.OverallSentimentScore = OverallSentimentScore;
@@ -78,7 +78,7 @@ function fillModelWithDiscoveryResults(DiscoveryResponse){
     }
 
     RESULTS.DiscoveryResults.relatedArticles = relatedArticles; 
-} 
+}
      
    
 function fillModelWithToneAnalyzerResults(results){
@@ -538,8 +538,7 @@ function addToTable_sentence(sentence, toneName,score){
           }
       }
   });
-<<<<<<< HEAD
-
+ 
   var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
   var conceptSentimentChart = new Chart(ctx, {
       type: 'doughnut',

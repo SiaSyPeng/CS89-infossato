@@ -40,8 +40,7 @@ module.exports = function(req, res) {
       " top5Articles " + top5Articles
     
 
-      res.send(results);
-      //console.log(response)
+       //console.log(response)
       res.send(response);
      } 
   }); 

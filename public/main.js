@@ -346,7 +346,6 @@ function addToTable_sentence(sentence, toneName,score){
           labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
           datasets: [{
               data: [0.12, 0.9, 0.3, 0.5, 0.2, 0.10, 0.11],
-              borderWidth:[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',

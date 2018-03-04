@@ -1,49 +1,51 @@
                //SENTIENT WEB APP : Back-end js//
 
  //Results variables
-var ToneAnalyzerResults; 
+var ToneAnalyzerResults;
 var NLUResults;
-var Overall = []; 
-var RESULTS = {};   
-var topEmotion = [];  
+var Overall = [];
+var RESULTS = {};
+var topEmotion = [];
+var OverallSentimentScore =  [858, 758, 71];
+
 /*
 var concepts = ['Dartmouth'];
-var OverallSentimentScore =  [858, 758, 71]; 
-//    var Emotions = ['sadness', 'joy', 'fear','disgust','anger']; 
+var OverallSentimentScore =  [858, 758, 71];
+//    var Emotions = ['sadness', 'joy', 'fear','disgust','anger'];
 
 
   var Tones{
     'analytical': ,
     'confident': ,
-    'tentative':    
+    'tentative':
   };
 
- 
-var Overall{ Tones, Emotions, Sentiment }; 
+
+var Overall{ Tones, Emotions, Sentiment };
 
 
 
 var Keywords{};        //could be any number of words, each with an emotion-score pair
     for (index=0; index < ;index++){
-     keywords[sth[index]] = {sth[index].tone,sth[index].score}; 
+     keywords[sth[index]] = {sth[index].tone,sth[index].score};
     }
- 
-        
+
+
 var Sentences{};         //could be any number of sentences , each with an emotion-score pair
   for (index=0; index < ;index++){
-     sentences[sth[index]] = {sth[index].tone,sth[index].score}; 
+     sentences[sth[index]] = {sth[index].tone,sth[index].score};
 }
-         
+
 var Outliers{keywords,sentences};
-     
+
 var Concepts{};         //could be any number of word-score pairs
   for (index=0; index < ;index++){
-     sentences[sth[index]] = sth[index].score; 
-  } 
-    
-         
+     sentences[sth[index]] = sth[index].score;
+  }
+
+
 var TotalResults{overall,concepts,outliers};
-*/   
+*/
 
 function fillModelWithToneAnalyzerResults(results){
     ToneAnalyzerResults = results; //store resutls in a global var
@@ -52,131 +54,131 @@ function fillModelWithToneAnalyzerResults(results){
     var ToneScores = [];
     for(var index = 0 ;index < tones.length; index++ ){
         Tones[index] = tones[index].tone_name;
-        ToneScores[index] = tones[index].score;        
+        ToneScores[index] = tones[index].score;
     }
-       
-   // console.log("Tones is: " + Tones[0]);  
+
+   // console.log("Tones is: " + Tones[0]);
     Overall.push(Tones);
     RESULTS.Overall = Overall;
 }
- 
- 
+
+
 function fillModelWithNLUResults(results){
             //emotions
     NLUResults = results;  //store results in a global var
     var emotions = NLUResults.emotion.document.emotion;
-    var Emotions = ['sadness', 'joy', 'fear','disgust','anger']; 
-    var EmotionScores = []; 
+    var Emotions = ['sadness', 'joy', 'fear','disgust','anger'];
+    var EmotionScores = [];
     var emotions = Object.values(emotions);  //map json values to an array
-   
+
     var topEmotionScore = 0;
     for(var index = 0 ;index < emotions.length; index++){
         EmotionScores[index] = emotions[index];
-        if (emotions[index] > topEmotionScore){  
-            topEmotionScore = emotions[index]; 
+        if (emotions[index] > topEmotionScore){
+            topEmotionScore = emotions[index];
             topEmotion =[ Emotions[index], emotions[index] ];   // store [emotions, score]
         }
-            
-    }   
+
+    }
     //console.log("emotion indexed is : "+ Emotions[1] +":"+ EmotionScores[1]);
-     console.log("topEmotion is :"+ topEmotion[0]); 
-    
+     console.log("topEmotion is :"+ topEmotion[0]);
+
             //sentiment
-    var Sentiment = NLUResults.sentiment.document;    
+    var Sentiment = NLUResults.sentiment.document;
     Overall.push(EmotionScores)
-    Overall.push(Sentiment);  
-    
-     //console.log("Sentiment in overall :" +Overall[2].label); 
-    
-    
+    Overall.push(Sentiment);
+
+     //console.log("Sentiment in overall :" +Overall[2].label);
+
+
             //keywords
-    
-    
-            //concepts    
+
+
+            //concepts
     Concepts = [];
     for(var index = 0 ;index < NLUResults.concepts.length; index++){
         Concepts.push(NLUResults.concepts[index].text);
     }
-    
-    
+
+
     RESULTS.Concepts = Concepts;
  }
-     
+
 
 
 // compares values from both ToneAnalyzer and NLU, so call after both requests called
-function fillModelWithOutliers(){ 
-    var Outliers = {};   
-    console.log("fillModelWithOutliers() called");  
-    //keywords 
-    var Outlyingkeywords = [];    
-    var keywords = NLUResults.keywords; 
-    
+function fillModelWithOutliers(){
+    var Outliers = {};
+    console.log("fillModelWithOutliers() called");
+    //keywords
+    var Outlyingkeywords = [];
+    var keywords = NLUResults.keywords;
+
     for(var index = 0 ;index < keywords.length; index++){
-    //for (var keyword in NLUResults.keywords){  
-        
+    //for (var keyword in NLUResults.keywords){
+
         var emotions = Object.values(keywords[index].emotion);   //get emotion scores into an array
-        
+
         //find highest scoring emotion in keyword
-        var newtopEmotion = [];   
+        var newtopEmotion = [];
         var newtopEmotionScore = 0;
         for(var index2 = 0 ;index2 < emotions.length; index2++){ //for all scores of emotion
             newtopEmotionScore = emotions[index2];
             if (emotions[index2] > newtopEmotionScore){    //if score is greater than max, replace it
-                newtopEmotionScore = emotions[index2]; 
+                newtopEmotionScore = emotions[index2];
                 newtopEmotion = [ Emotions[index2], emotions[index2] ];   // store [emotion, score]
             }
-  
+
         }
-            
-         // if highest emotion is different from document topEmotion              
-        if (newtopEmotion[0] != topEmotion[0]){ 
+
+         // if highest emotion is different from document topEmotion
+        if (newtopEmotion[0] != topEmotion[0]){
             outlyingkeyword = [ NLUResults.keywords[index].text, newtopEmotion[0], newtopEmotion[1] ]; //store keyword, emotion and score
             Outlyingkeywords.push(outlyingkeyword);         //add it to outliers
-        } 
-         
+        }
+
     }
-    Outliers.Outlyingkeywords = Outlyingkeywords; 
-    console.log(Outliers.Outlyingkeywords[0][0]); 
-    
-    
- /*   
-    //sentences    
-    var Outlyingsentences = [];    
-    var sentences = ToneAnalyzerResults.sentences_tone; 
-    
+    Outliers.Outlyingkeywords = Outlyingkeywords;
+    console.log(Outliers.Outlyingkeywords[0][0]);
+
+
+ /*
+    //sentences
+    var Outlyingsentences = [];
+    var sentences = ToneAnalyzerResults.sentences_tone;
+
     for(var index = 0 ;index < sentences.length; index++){
-    
+
         var emotions = Object.values(keywords[index].emotion);   //get emotion scores into an array
-        
+
         //find highest scoring emotion in keyword
-        var newtopEmotion = [];  
+        var newtopEmotion = [];
         var newtopEmotionScore = 0;
         for(var index2 = 0 ;index2 < emotions.length; index2++){ //for all scores of emotion
             newtopEmotionScore = emotions[index2];
             if (emotions[index2] > newtopEmotionScore){    //if score is greater than max, replace it
-                newtopEmotionScore = emotions[index2]; 
+                newtopEmotionScore = emotions[index2];
                 newtopEmotion = [ Emotions[index2], emotions[index2] ];   // store [emotion, score]
             }
-  
+
         }
-            
-         // if highest emotion is different from document topEmotion              
+
+         // if highest emotion is different from document topEmotion
         if (newtopEmotion[1] != topEmotion[1]){
             outlyingkeyword = [ NLUResults.keywords[index].text, newtopEmotion[0], newtopEmotion[1] ]; //store keyword, emotion and score
             Outlyingkeywords.push(outlyingkeyword);         //add it to outliers
         }
-         
-    } 
+
+    }
     Outliers.Outlyingkeywords = Outlyingkeywords;
    // console.log(Outliers.Outlyingkeywords[0][0]);
     */
-    
+
    // add to general results
-    RESULTS.Outliers = Outliers; 
-     
+    RESULTS.Outliers = Outliers;
+
 }
-      
+
                         /***** Helper Functions *******/
 
 
@@ -192,7 +194,7 @@ function errorCB(jqXHR, textStatus, err){
   console.error("Error", err);
 }
 
- 
+
 //ajax request to server
 function getToneAnalysis(TextToAnalyze, content_type){
 

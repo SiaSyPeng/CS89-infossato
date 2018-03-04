@@ -6,6 +6,7 @@ var NLUResults;
 var Overall = [];
 var RESULTS;
 var concepts = ['Dartmouth'];
+var OverallSentimentScore =  [858, 758, 71];
 /*
 
 
@@ -329,6 +330,9 @@ function addToTable_sentence(sentence, toneName,score){
   }
 
   function displayDiscoveryAnalysis(result) {
+    // get scores for overall Sentiment, assign it to global variable OverallSentimentScore
+    // in array format, corresponding to the order of positive, negative, Neutral
+    OverallSentimentScore = [858, 758, 71];
     console.log(result);
   }
   /*
@@ -341,7 +345,8 @@ function addToTable_sentence(sentence, toneName,score){
       data: {
           labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
           datasets: [{
-              data: [12, 19, 3, 5, 2, 10, 11],
+              data: [0.12, 0.9, 0.3, 0.5, 0.2, 0.10, 0.11],
+              borderWidth:[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -487,7 +492,7 @@ function addToTable_sentence(sentence, toneName,score){
       data: {
           labels: ["Positive", "Neutral", "Negative"],
           datasets: [{
-              data: [10, 20, 5],
+              data: OverallSentimentScore,
               backgroundColor: [
                 'rgb(220, 184, 203)',
                 'rgb(204,215,228)',

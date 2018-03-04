@@ -7,30 +7,39 @@ var discovery = new DiscoveryV1({
   version_date: '2017-11-07'
 });
 
-var concept = req.body.input;
-console.log('req.body.input= '+ concept);
 
-const params = { query: concept,
-  filter: 'language:(english|en),crawl_date>2018-02-24T12:00:00-0500,crawl_date<2018-03-03T12:00:00-0500',
-  aggregations: [
-    "term(host).term(enriched_text.sentiment.document.label)",
-    "term(enriched_text.sentiment.document.label)"
-  ],
-  count: 1,
-  environment_id: 'system',
-  collection_id: 'news' }
 
 module.exports = function(req, res) {
   console.log('now in discovery.js');
+
+  var concept = req.body.input;
+  console.log('req.body.input= '+ concept);
+
+  const params = { query: "\"concept\"",
+    filter: 'language:(english|en),crawl_date>2018-02-24T12:00:00-0500,crawl_date<2018-03-03T12:00:00-0500',
+    aggregations: [
+      "term(host).term(enriched_text.sentiment.document.label)",
+      "term(enriched_text.sentiment.document.label)"
+    ],
+    environment_id: 'system',
+    collection_id: 'news' }
+
   discovery.query(params, (error, response) => {
     console.log(params);
     if (error) {
       next(error);
     } else {
-      console.log(JSON.stringify(response, null, 2));
+      //results = console.log(JSON.stringify(response, null, 2));
+      if (response.sentiment){
+          console.log('here');
+          console.log( "parsed = " + response.sentiment );
+      }
+      console.log(response)
+      //res.send(response);
+      //console.log(JSON.stringify(response, null, 2));
     }
   });
-  console.log('exited');
+  //console.log('exited');
 }
 
 // discovery.createEnvironment({

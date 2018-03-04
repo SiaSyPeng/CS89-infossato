@@ -3,30 +3,30 @@ body {
 }
 
 .titleBox{
-  background-color: #6FB7A5
+  background-color: #3E9DC1;
 }
 
 .inputContainer {
-  background-color: #B6D178;
+  background-color: #73CADE;
   padding: 10px;
 }
 
 .inputAnalysis {
-  background-color: #ECEDEC;
+  background-color: #FFEEDF;
   padding: 10px;
 }
 
 .keyConcepts {
-  background-color: #AAE2CD;
+  background-color: #A9C0DF;
   padding: 10px;
 }
 
 .conceptSentiment {
-  background-color: #8DD6C3;
+  background-color: #C5CDDF;
   padding: 10px;
 }
 
 .relaventRead {
-  background-color: #DDE3BB;
+  background-color: #61A3CF;
   padding: 10px;
 }

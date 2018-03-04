@@ -71,7 +71,7 @@ function fillModelWithToneAnalyzerResults(results){
     console.log("Tonescores are "+ ToneScores);
     console.log("Tones are "+Tones);
     FinalToneScores = ToneScores;
-    displayToneAnalysisResults();
+    displayToneAnalysisResults(Tones, ToneScores);
 
 }
 
@@ -121,6 +121,8 @@ function fillModelWithNLUResults(results){
 
     RESULTS.Concepts = Concepts;
     console.log("Concepts extracted are" + Concepts );
+    $('#conceptBlock').append(document.createElement('h1').innerHTML = RESULTS.Concepts[0]);
+
     queryConcept(Concepts);
 
  }
@@ -316,15 +318,15 @@ function queryConcept(Concepts) {
 
                 /***********Display Functions **********/
 
-function displayToneAnalysisResults(jsonResponse){
+function displayToneAnalysisResults(Tones, ToneScores){
 
   var ctx = document.getElementById("toneChart").getContext('2d');
   var toneChart = new Chart(ctx, {
       type: 'polarArea',
       data: {
-          labels: ["Anger", "Fear", "Joy", "Sadness", "Analytical", "Confident", "tentative"],
+          labels: Tones,
           datasets: [{
-              data: FinalToneScores,
+              data: ToneScores,
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -361,7 +363,7 @@ function displayToneAnalysisResults(jsonResponse){
              labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
              datasets: [{
                  label: 'Emotions',
-                 data: Overall.EmotionScores,
+                 data: EmotionScoresArray,
                  backgroundColor: [
                    'rgba(255, 99, 132, 0.2)',
                  ],

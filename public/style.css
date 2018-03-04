@@ -43,12 +43,18 @@ body {
   padding-top: 150px;
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
 }
 
 .keyConcepts {
   background-color: #A9C0DF;
   padding: 10px;
+}
+
+#conceptBlock{
+  color:white;
+  font-size: 30px;
 }
 
 .conceptSentiment {
@@ -61,10 +67,12 @@ body {
   padding: 10px;
 }
 
-.relatedArticles a { 
+.relatedArticles a {
 text-decoration:  none;
 display: block;
-} 
+color: white;
+font-size: 20px;
+}
  s
 .btn-analyze {
   color: #FFFFFF;
@@ -110,4 +118,4 @@ fieldset[disabled] .btn-analyze.active {
 .btn-analyze .badge {
   color: #18859E;
   background-color: #FFFFFF;
-} 
+}

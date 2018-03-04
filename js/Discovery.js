@@ -37,7 +37,7 @@ module.exports = function(req, res) {
       var results = "parsed " + numberOfArticles +
       " articles and the aggregation is "+ aggregations +
       " top5Articles " + top5Articles
-      );
+    
 
       res.send(results);
       //console.log(response)

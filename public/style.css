@@ -1,0 +1,32 @@
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+.titleBox{
+  background-color: #6FB7A5
+}
+
+.inputContainer {
+  background-color: #B6D178;
+  padding: 10px;
+}
+
+.inputAnalysis {
+  background-color: #ECEDEC;
+  padding: 10px;
+}
+
+.keyConcepts {
+  background-color: #AAE2CD;
+  padding: 10px;
+}
+
+.conceptSentiment {
+  background-color: #8DD6C3;
+  padding: 10px;
+}
+
+.relaventRead {
+  background-color: #DDE3BB;
+  padding: 10px;
+}

@@ -5,42 +5,46 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css" />
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type="text/css" >
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <body>
-  <div class="text-center">
+  <div class="container-fluid text-center titleBox">
     <h1 class="display-1">SENTIENT <small class="text-muted">WEB APP</small></h1>
   </div>
-  <div class="container">
-    <h2>Comprehensive Analyzer</h2>
-    <p> Enter sample text. Hit 'Analyze' to get tone analysis</p>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="exampleRadios" id="TextRadio" value="option1" checked>
-      <label class="form-check-label" for="exampleRadios1">
-        Text
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="exampleRadios" id="URLRadio" value="option2">
-      <label class="form-check-label" for="exampleRadios2">
-        URL
-      </label>
-    </div>
-    <div class=inputBlock>
-      <textarea class="form-control" rows="5" id="TextToAnalyse" placeholder="Enter your text here:
-      it could be a sentence, a whole document, or even the URL to a web page."></textarea>
-      <br  />
-      <button type="button" class="btn btn-primary" id="submitText">Analyze</button>
-    </div>
-    <div class=tone_responseBlock>
+  <div class="container-fluid inputContainer">
+    <div class="container text-center">
+      <h2>Comprehensive Analyzer</h2>
+      <p> Enter sample text. Hit 'Analyze' to get tone analysis</p>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="TextRadio" value="option1" checked>
+        <label class="form-check-label" for="exampleRadios1">
+          Text
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="URLRadio" value="option2">
+        <label class="form-check-label" for="exampleRadios2">
+          URL
+        </label>
+      </div>
+      <div class=inputBlock>
+        <textarea class="form-control" rows="5" id="TextToAnalyse" placeholder="Enter your text here:
+        it could be a sentence, a whole document, or even the URL to a web page."></textarea>
+        <br  />
+        <button type="button" class="btn btn-primary" id="submitText">Analyze</button>
+      </div>
+      <div class=tone_responseBlock>
+      </div>
     </div>
   </div>
 
-  <div class="container">
-    <div class="container-fluid row">
+  <div class="container-fluid inputAnalysis">
+    <div class="container row">
         <div class="col-md-6">
           <canvas id="toneChart"></canvas>
         </div>
@@ -48,7 +52,7 @@
           <canvas id="emotionChart"></canvas>
         </div>
     </div>
-    <div class="container-fluid row">
+    <div class="container row">
         <div class="col-md-6">
           <canvas id="senEmotionChart"></canvas>
         </div>
@@ -56,13 +60,26 @@
           <canvas id="keyEmotionChart"></canvas>
         </div>
     </div>
-    <div class="container-fluid row">
-        <div class="col-md-6 col-md-offset-3">
-          <canvas id="conceptSentimentChart"></canvas>
-        </div>
-    </div>
-    <button type="button" class="btn btn-primary" id="testBut">Discovery</button>
+  </div>
 
+  <div class="container-fluid text-center keyConcepts">
+    <h3>some key concepts</h3>
+  </div>
+
+  <div class="container-fluid conceptSentiment">
+    <div class="container">
+      <button type="button" class="btn btn-primary" id="testBut">Discovery</button>
+      <div class="container-fluid row">
+          <div class="col-md-6 col-md-offset-3">
+            <canvas id="conceptSentimentChart"></canvas>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid text-center relaventRead">
+    <h2>Relevant Articles</h2>
+    <p> i.e..</p>
   </div>
 </div>
 <!--   //TODO

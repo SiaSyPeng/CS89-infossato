@@ -61,11 +61,11 @@ body {
   padding: 10px;
 }
 
-.relatedArticles a{
+.relatedArticles a { 
 text-decoration:  none;
 display: block;
 } 
-
+ s
 .btn-analyze {
   color: #FFFFFF;
   background-color: #18859E;
@@ -110,4 +110,4 @@ fieldset[disabled] .btn-analyze.active {
 .btn-analyze .badge {
   color: #18859E;
   background-color: #FFFFFF;
-}
+} 

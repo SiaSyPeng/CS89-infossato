@@ -66,12 +66,12 @@ function fillModelWithToneAnalyzerResults(results){
     Overall.push(Tones);
     RESULTS.Overall = Overall;
 
-    console.log(ToneScores);
-    console.log(Tones);
-    //FinalToneScores = ToneScores;
+    console.log("Tonescores are "+ ToneScores);
+    console.log("Tone are "+Tones); 
+    FinalToneScores = ToneScores; 
     displayToneAnalysisResults(); 
-
-} 
+ 
+}
  
 
 function fillModelWithNLUResults(results){
@@ -205,9 +205,12 @@ function fillModelWithOutliers(){
 
 
 
+
+
+
+
+
                         /***** Helper Functions *******/
-
-
 
 function TextHTMLOrURL(){
    return $("#content_type").val();
@@ -272,9 +275,43 @@ function getNLAnalysis(TextToAnalyze, content_type){
       }); 
    console.log(" NLAnalysis ajax sent");      
 }
+ 
+
+
+function queryConcept(Concepts) {
+     console.log('Quering: ' + Concepts[0]);
+     getDiscoveryAnalysis(Concepts[0]);
+  } 
+
+  function getDiscoveryAnalysis(Concepts){
+     console.log("The concept about to be passed to ajax is : " + Concepts );
+     let info = {input : Concepts };
+     $.ajax({
+          contentType: 'application/json',
+          data: JSON.stringify(info),
+          url: '/services/AnalyzeSentiment',
+          type: 'POST',
+          success: function(result) {
+          DiscoveryResponse = result; 
+          fillModelWithDiscoveryResults(result);   
+
+         },
+          error: errorCB
+      });
+      console.log("ajax sent");
+  }
 
 
 
+                    /***** End of Helper Functions *******/
+
+
+
+
+
+
+
+                /***********Display Functions **********/
 
 function displayToneAnalysisResults(jsonResponse){
 
@@ -320,7 +357,6 @@ function listRelatedArticles(relatedArticlesArray){
   
  
  
-
  function displayNLAnalysisResults(jsonResponse){
 
      // results for the whole document
@@ -357,42 +393,7 @@ function listRelatedArticles(relatedArticlesArray){
 
 }
 
-  function handleSubmitText(TextToAnalyse) {
-     // when analyze button is hit,
-     var content_type =  TextHTMLOrURL();
-     getToneAnalysis(TextToAnalyse, content_type);
-     getNLAnalysis(TextToAnalyse, content_type);
-  }
-
-
-  $( "#testBut" ).on('click',
-  function(){
-     // console.log( ""+ $("#TextToAnalyse").val() +" Was passed to getToneAnalysis");
-   queryConcept(concepts);
-  }); 
-
-  function queryConcept(Concepts) {
-     console.log('Quering: ' + Concepts[0]);
-     getDiscoveryAnalysis(Concepts[0]);
-  } 
-
-  function getDiscoveryAnalysis(Concepts){
-     console.log("The concept about to be passed to ajax is : " + Concepts );
-     let info = {input : Concepts };
-     $.ajax({
-          contentType: 'application/json',
-          data: JSON.stringify(info),
-          url: '/services/AnalyzeSentiment',
-          type: 'POST',
-          success: function(result) {
-          DiscoveryResponse = result; 
-          fillModelWithDiscoveryResults(result);   
-
-         },
-          error: errorCB
-      });
-      console.log("ajax sent");
-  }
+  
  
   function displayDiscoveryAnalysis(result) {
     // get scores for overall Sentiment, assign it to global variable OverallSentimentScore
@@ -424,6 +425,7 @@ function listRelatedArticles(relatedArticlesArray){
         }
     });
   }
+
   /*
    * All the graphs
    */
@@ -549,7 +551,23 @@ function listRelatedArticles(relatedArticlesArray){
       }
   });
 
-  
+
+                    /***** End of Display Functions *******/
+
+
+
+ 
+
+
+
+                    /*****Event Handlers *******/
+
+ function handleSubmitText(TextToAnalyse) {  
+     // when analyze button is hit,
+     var content_type =  TextHTMLOrURL();
+     getNLAnalysis(TextToAnalyse, content_type);
+} 
+
                   /***** End of Event Handlers *******/
 
 

@@ -144,29 +144,31 @@ function fillModelWithOutliers(){
     var Outlyingkeywords = [];
     var keywords = NLUResults.keywords;
 
+    
     for(var index = 0 ;index < keywords.length; index++){
     //for (var keyword in NLUResults.keywords){
+ 
+        if (keywords[index].emotion){
+            var emotions = Object.values(keywords[index].emotion);   //get emotion scores into an array
 
-        var emotions = Object.values(keywords[index].emotion);   //get emotion scores into an array
-
-        //find highest scoring emotion in keyword
-        var newtopEmotion = [];
-        var newtopEmotionScore = 0;
-        for(var index2 = 0 ;index2 < emotions.length; index2++){ //for all scores of emotion
-            newtopEmotionScore = emotions[index2];
-            if (emotions[index2] > newtopEmotionScore){    //if score is greater than max, replace it
+            //find highest scoring emotion in keyword
+            var newtopEmotion = [];
+            var newtopEmotionScore = 0;
+            for(var index2 = 0 ;index2 < emotions.length; index2++){ //for all scores of emotion
                 newtopEmotionScore = emotions[index2];
-                newtopEmotion = [ Emotions[index2], emotions[index2] ];   // store [emotion, score]
+                if (emotions[index2] > newtopEmotionScore){    //if score is greater than max, replace it
+                    newtopEmotionScore = emotions[index2];
+                    newtopEmotion = [ Emotions[index2], emotions[index2] ];   // store [emotion, score]
+                }
+
             }
 
+             // if highest emotion is different from document topEmotion
+            if (newtopEmotion[0] != topEmotion[0]){
+                outlyingkeyword = [ NLUResults.keywords[index].text, newtopEmotion[0], newtopEmotion[1] ]; //store keyword, emotion and score
+                Outlyingkeywords.push(outlyingkeyword);         //add it to outliers
+            }
         }
-
-         // if highest emotion is different from document topEmotion
-        if (newtopEmotion[0] != topEmotion[0]){
-            outlyingkeyword = [ NLUResults.keywords[index].text, newtopEmotion[0], newtopEmotion[1] ]; //store keyword, emotion and score
-            Outlyingkeywords.push(outlyingkeyword);         //add it to outliers
-        }
-
     }
     Outliers.Outlyingkeywords = Outlyingkeywords;
     console.log(Outliers.Outlyingkeywords[0][0]);
@@ -404,6 +406,18 @@ function displayToneAnalysisResults(Tones, ToneScores){
     // get scores for overall Sentiment, assign it to global variable OverallSentimentScore
     // in array format, corresponding to the order of positive, negative, Neutral
     console.log('in analysis');
+    var totaldocuments = DiscoveryOverallSentimentScore[0]+DiscoveryOverallSentimentScore[1]+DiscoveryOverallSentimentScore[2];
+        
+    //display graph desription 
+    $('.conceptSentiment').find('div .graphDescription').remove();   //delete current descr
+    var description = document.createElement('div');
+    description.className = 'graphDescription';  
+    var html = '<h2>Sentiment analysis on '+ totaldocuments +' documents about similar concept</h2>';
+    description.innerHTML = html;   
+    $('.conceptSentiment').prepend(description);  
+     
+      
+    
     var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
     var conceptSentimentChart = new Chart(ctx, {
         type: 'doughnut',

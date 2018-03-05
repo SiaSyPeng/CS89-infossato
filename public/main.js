@@ -119,11 +119,20 @@ function fillModelWithNLUResults(results){
 
     RESULTS.Concepts = Concepts;
     console.log("Concepts extracted are" + Concepts );
-    $('#conceptBlock').append(document.createElement('h1').innerHTML = RESULTS.Concepts[0]);
-
+    listKeyConcepts(Concepts); 
     queryConcept(Concepts);
 
  }
+ 
+function listKeyConcepts(ConceptsArray){ 
+
+    $('#conceptBlock').find('span').remove();  //delete existing list
+    for(var index = 0; index < Math.floor(ConceptsArray.length/2); index++){  //list half of returned concepts 
+        var concept = document.createElement('span');
+        concept.innerHTML = ConceptsArray[index];
+        $('#conceptBlock').append(concept);  
+    }
+} 
 
 
 
@@ -436,108 +445,6 @@ function listRelatedArticles(relatedArticlesArray){
         $('.relatedArticles').append(article);
      }
 }
-
-
-  /*
-   * All the graphs
-   */
-/*
-  var ctx = document.getElementById("keyEmotionChart").getContext('2d');
-  var keyEmotionChart = new Chart(ctx, {
-      type: 'radar',
-      data: {
-          labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
-          datasets: [{
-              label: 'Trump',
-              data: [1, 20, 5, 7, 4],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-              ],
-              borderWidth: 1
-          },
-          {
-              label: 'Obama',
-              data: [12, 19, 3, 5, 2],
-              backgroundColor: [
-                  'rgba(255, 99, 20, 0.2)',
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-              ],
-              borderWidth: 1
-          }
-        ],
-
-      },
-      options: {
-          scales: {
-              display: true
-          }
-      }
-  });
-
-  var ctx = document.getElementById("senEmotionChart").getContext('2d');
-  var senEmotionChart = new Chart(ctx, {
-      type: 'radar',
-      data: {
-          labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
-          datasets: [{
-              label: 'This is bad',
-              data: [1, 20, 5, 7, 4],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.5)',
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-              ],
-              borderWidth: 1
-          },
-          {
-              label: 'This is something',
-              data: [5, 10, 10, 6, 14],
-              backgroundColor: [
-                'rgba(200, 99, 132, 0.5)',
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-              ],
-              borderWidth: 1
-          },
-          {
-              label: 'lalala',
-              data: [13, 2, 3, 3, 5],
-              backgroundColor: [
-                'rgba(100, 99, 132, 0.5)',
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-              ],
-              borderWidth: 1
-          },
-          {
-              label: 'This is good',
-              data: [12, 19, 3, 5, 2],
-              backgroundColor: [
-                  'rgba(255, 99, 20, 0.5)',
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-              ],
-              borderWidth: 1
-          }
-        ]
-      },
-      options: {
-          scales: {
-              display: true
-          }
-      }
-  });
-
-*/
 
 
                     /***** End of Display Functions *******/

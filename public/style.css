@@ -55,7 +55,7 @@ body {
 
 .inputAnalysis {
   background-color: #FFEEDF;
-  padding-bottom: 140px;
+  padding-bottom: 140px; 
   padding-top: 150px;
   display: flex;
   flex-direction: row;
@@ -65,7 +65,13 @@ body {
 
 .keyConcepts {
   background-color: #A9C0DF;
-  padding: 40px;
+  padding: 10px;
+  display: block;  
+}   
+ 
+.keyConcepts span{
+  padding: 10px; 
+  display: block; 
 }
 
 #conceptBlock{

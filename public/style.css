@@ -3,8 +3,13 @@ body {
 }
 
 .display-1 {
-  font-size: 48px;
+  font-size: 70px;
   color: black;
+}
+
+.display-2 {
+  font-size: 50px;
+  font-weight: normal;
 }
 
 .title {
@@ -16,8 +21,10 @@ body {
   background-repeat: no-repeat;
   background-image: url(pictures/cover.jpg);
   background-position: bottom left;
+  background-size: 70vw 75vh ;
   padding-top: 250px;
   padding-bottom: 225px;
+  height: 100vh;
 }
 
 .form-check {
@@ -35,22 +42,29 @@ body {
   text-align: center;
   background-color: #61A3CF;
   padding: 40px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 #testButton {
-  font-size: 40px;
+  font-size: 50px;
   padding: 10px;
   font-weight: bold;
   color: white;
   border: : 0;
   background: none;
+
 }
 
-
+.inputBlock {
+  height: 70vh;
+}
 .inputContainer {
   padding-bottom: 140px;
   padding-top: 200px;
   background-color: #73CADE;
+  height: 100vh;
 }
 
 .inputAnalysis {

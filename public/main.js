@@ -136,7 +136,7 @@ function listKeyConcepts(ConceptsArray){
         concept.innerHTML = ConceptsArray[index];
         $('#conceptBlock').append(concept);  
     }
-} 
+}
 
 
 
@@ -276,11 +276,10 @@ function getNLAnalysis(TextToAnalyze, content_type){
 
    // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
 
-
     if (typeof content_type === 'undefined' || content_type === null) {
         var content_type = 'text';    //make plain text the default content type
         console.log('NLU content_type changed to '+ content_type);
-    }
+    }  
 
  
    let info = {input : TextToAnalyze, content_type: content_type};
@@ -417,9 +416,9 @@ function displayToneAnalysisResults(Tones, ToneScores){
     // in array format, corresponding to the order of positive, negative, Neutral
     console.log('in analysis');
     var totaldocuments = DiscoveryOverallSentimentScore[0]+DiscoveryOverallSentimentScore[1]+DiscoveryOverallSentimentScore[2];
-        
+         
     //display graph desription 
-    $('.conceptSentiment').find('div .graphDescription').remove();   //delete current descr
+    $('.conceptSentiment').find('.graphDescription').remove();   //delete current descr
     var description = document.createElement('div');
     description.className = 'graphDescription';  
     var html = '<h2>Sentiment analysis on '+ totaldocuments +' documents about similar concept</h2>';
@@ -427,7 +426,7 @@ function displayToneAnalysisResults(Tones, ToneScores){
     $('.conceptSentiment').prepend(description);  
    if (conceptSentimentChart) {
       conceptSentimentChart.destroy();
-    }  
+    }
       
  
     var ctx = document.getElementById("conceptSentimentChart").getContext('2d');

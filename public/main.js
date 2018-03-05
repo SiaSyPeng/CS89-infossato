@@ -9,7 +9,11 @@ var topEmotion = [];
 var DiscoveryResults = [];
 RESULTS.DiscoveryResults = DiscoveryResults;
 var DiscoveryOverallSentimentScore = [];
-  
+
+// char variable
+var toneChart;
+var emotionChart;
+var conceptSentimentChart;
 
 
 
@@ -102,10 +106,10 @@ function fillModelWithNLUResults(results){
     Overall.push(EmotionScores);
     Overall.push(Sentiment);
 
-    displayEmotionsInDocument(EmotionScores);  
+    displayEmotionsInDocument(EmotionScores);
      //console.log("Sentiment in overall :" +Overall[2].label);
 
-  
+
 
             //keywords
 
@@ -198,7 +202,7 @@ function fillModelWithOutliers(){
    // add to general results
     RESULTS.Outliers = Outliers;
 
-} 
+}
 
 
 
@@ -217,19 +221,19 @@ function fillModelWithOutliers(){
 
 
 //return input type
- function TextOrURL(){ 
-   return ($(".radioButtons").attr('id'));    
-} 
+ function TextOrURL(){
+   return ($(".radioButtons").attr('id'));
+}
 
 //to log errors
-function errorCB(jqXHR, textStatus, err){ 
+function errorCB(jqXHR, textStatus, err){
   console.error("Error", err);
 }
 
 
-function getToneAnalysis(TextToAnalyze, content_type){ 
-    
-  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
+function getToneAnalysis(TextToAnalyze, content_type){
+
+  // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
 
     if (typeof content_type === 'undefined' || content_type === null || content_type == 'text') {
         var content_type = 'plain';    //make plain text the default content type
@@ -257,9 +261,9 @@ function getToneAnalysis(TextToAnalyze, content_type){
 
 
 
-function getNLAnalysis(TextToAnalyze, content_type){ 
-    
-   // console.log("The text about to be passed to ajax is :" +TextToAnalyze );   
+function getNLAnalysis(TextToAnalyze, content_type){
+
+   // console.log("The text about to be passed to ajax is :" +TextToAnalyze );
 
 
     if (typeof content_type === 'undefined' || content_type === null) {
@@ -322,10 +326,12 @@ function queryConcept(Concepts) {
 
 function displayToneAnalysisResults(Tones, ToneScores){
 
+  if (toneChart) {
+    toneChart.destroy();
+  }
   var ctx = document.getElementById("toneChart").getContext('2d');
-    
-  
-  var toneChart = new Chart(ctx, {
+
+  toneChart = new Chart(ctx, {
       type: 'polarArea',
       data: {
           labels: Tones,
@@ -360,14 +366,18 @@ function displayToneAnalysisResults(Tones, ToneScores){
      // console.log('emotion' + emotion);
      //console.log('sentiment' + sentiment);
 
+     if (emotionChart) {
+       emotionChart.destroy();
+     }
+
      var ctx = document.getElementById("emotionChart").getContext('2d');
-     var emotionChart = new Chart(ctx, {
+     emotionChart = new Chart(ctx, {
          type: 'radar',
          data: {
              labels: ["Sadness", "Joy", "Fear", "Anger", "Disgust"],
              datasets: [{
                  label: 'Emotions',
-                 data: EmotionScoresArray, 
+                 data: EmotionScoresArray,
 
                  backgroundColor: [
                    'rgba(255, 99, 132, 0.2)',
@@ -395,8 +405,12 @@ function displayToneAnalysisResults(Tones, ToneScores){
     // get scores for overall Sentiment, assign it to global variable OverallSentimentScore
     // in array format, corresponding to the order of positive, negative, Neutral
     console.log('in analysis');
+    if (conceptSentimentChart) {
+      conceptSentimentChart.destroy();
+    }
+
     var ctx = document.getElementById("conceptSentimentChart").getContext('2d');
-    var conceptSentimentChart = new Chart(ctx, {
+    conceptSentimentChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: ["Positive", "Negative", "Neutral"],
@@ -552,13 +566,13 @@ function listRelatedArticles(relatedArticlesArray){
 
  function handleSubmitText(TextToAnalyse) {
      // when analyze button is hit,
-     var content_type = TextOrURL(); 
+     var content_type = TextOrURL();
      getNLAnalysis(TextToAnalyse, content_type);
 }
 
                   /***** End of Event Handlers *******/
 
- 
+
 
 
 
@@ -569,8 +583,8 @@ function listRelatedArticles(relatedArticlesArray){
   $( "#submitText" ).on('click',
   function(){
    handleSubmitText( $("#TextToAnalyse").val());
-  }); 
-    
+  });
+
   $( "#TextRadio" ).on('click',
   function(){
         $(".radioButtons").attr('id', 'text');
@@ -579,7 +593,6 @@ function listRelatedArticles(relatedArticlesArray){
   $( "#URLRadio" ).on('click',
   function(){
         $(".radioButtons").attr('id', 'url');
-  }); 
-  
-              /***** End of Event Listeners *******/
+  });
 
+              /***** End of Event Listeners *******/
